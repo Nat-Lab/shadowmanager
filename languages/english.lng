@@ -1,0 +1,4 @@
+#!/bin/bash
+PORT_ALREADY_IN_USE="The port is already in use. Please try another."
+SERVER_ADDED="The server is added to shadowmanager. Restart the server to make change take effect."
+INVALID_CHAR="Invalid charater(s) dected. Aborting..."

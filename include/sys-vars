@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# Shadowmanager system variables
+#
+
+SHADOWSOCKS_JSON_PRE='\
+{
+    "server": "0.0.0.0",
+    "port_password": {'
+SHADOWSOCKS_JSON_EXT='\
+    },
+    "timeout": 300,
+    "method": "aes-256-cfb"
+}'
