@@ -6,26 +6,46 @@
 
 # add: add a server
 # usage: add <port> <pass> <method>
-# TODO: warning when try to use '[', ']', ' ', ',' '(' ')' '{' '}' in any parameter.
-
 
 function add {
 	[[ -z $* ]] && usage add && return 1
+	[[ verify $* ]] && echo $CONTAIN_INVALID_CHARS && return 1
 	[[ ! -z $(grep $1 | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 }
 
+function verify {
+	for char in $INVALID_CHARS
+	do
+		if [[ $* == *$char* ]]
+		then
+			false; return
+		fi 
+	done
+	true
+}
+
 function genconf {
-	echo -n "Generating shadowsocks configure files... "
+	echo -n $GEN_SS_CONF
 	for method in $METHODS
 	do
 		echo -n "$method "
 		servers=$(cat $SHADOW_CONF | grep $method)
 		for server in $servers
 		do
-			# Generate shadowsocks configure file ...
+			true
+			# TODO: Generate shadowsocks configure file ...
 		done
 	done
-	echo "DONE"
+	echo $DONE
 }
+
+function start {
+	genconf
+}
+
+function usage {
+}
+
+$*

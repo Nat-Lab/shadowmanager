@@ -10,5 +10,7 @@ SHADOWSOCKS_JSON_PRE='\
 SHADOWSOCKS_JSON_EXT='\
     },
     "timeout": 300,
-    "method": "aes-256-cfb"
+    "method": "__METHOD__",
+    "fast_open": __FAST_OPEN__
 }'
+INVALID_CHARS="[ ] { } \  , ( )"
