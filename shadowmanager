@@ -1,4 +1,9 @@
 #!/bin/bash
+# 
+# shadowmanager main program, the computer science internal assigment.
+#
+# usage: shadowmanager <command> [arguments ...] 
+# use './shadowmanager usage' for more informations.
 
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
@@ -9,22 +14,26 @@
 
 function add {
 	[[ -z $* ]] && usage add && return 1
-	[[ verify $* ]] && echo $CONTAIN_INVALID_CHARS && return 1
+	[[ $(verify $*) == "false" ]] && echo $CONTAIN_INVALID_CHARS && return 1
 	[[ ! -z $(grep $1 | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 }
+
+# verify: verify if the input is valid
+# usage: verify <string>
 
 function verify {
 	for char in $INVALID_CHARS
 	do
 		if [[ $* == *$char* ]]
 		then
-			false; return
+			echo false; return
 		fi 
 	done
-	true
 }
+
+# genconf: generate the shadowsocks config file
 
 function genconf {
 	echo -n $GEN_SS_CONF
@@ -41,11 +50,39 @@ function genconf {
 	echo $DONE
 }
 
+# start: start shadowservers
+
 function start {
 	genconf
+	echo -n $STARTING_SERVERS
+	for server in $(ls $SHADOW_JSON_DIR)
+	do
+		$SHADOW_CMD$SHADOW_JSON_DIR$server
+	done
+	echo $DONE
 }
 
 function usage {
+	echo '
+usage: shadowmanager add <port> <password> <method>
+                     remove <id>
+                     start
+                     stop
+                     restart
+
+commands explained:
+
+	add:     add a server to shadowmanager handler, accepting 3 parameters,
+	         port, password and method, return 1 int value, server id.
+	remove:  remove a server from shadowmanager handler, accepting 1 paramet
+	         -er, server id, return 1 boolean value, successful or not. 
+	start:   start shadowmanager, no parameters required, return 1 boolean v
+	         -alue, successful or not.
+	stop:    stop shadowmanager, no parameters required, return 1 boolea val
+	         -ue , successful or not.
+	restart: restart shadowmanager, no parameters required, return 1 boolea
+	         value, successful or not.
+'
 }
 
 $*
