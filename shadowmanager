@@ -1,8 +1,8 @@
 #!/bin/bash
-# 
+#
 # shadowmanager main program, the computer science internal assigment.
 #
-# usage: shadowmanager <command> [arguments ...] 
+# usage: shadowmanager <command> [arguments ...]
 # use './shadowmanager usage' for more informations.
 
 . ./conf/shadowmanager.conf
@@ -12,10 +12,17 @@
 # add: add a server
 # usage: add <port> <pass> <method>
 
+function ifroot {
+	[[ $CHECK_ROOT == "true" && "$(id -u)" != "0" ]] && {
+		echo $ROOT_REQUIRED
+		exit 1
+	}
+}
+
 function add {
 	[[ -z $* ]] && usage add && return 1
 	[[ $(verify $*) == "false" ]] && echo $CONTAIN_INVALID_CHARS && return 1
-	[[ ! -z $(grep $1 | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
+	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep $1 | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 }
@@ -29,23 +36,38 @@ function verify {
 		if [[ $* == *$char* ]]
 		then
 			echo false; return
-		fi 
+		fi
 	done
 }
 
 # genconf: generate the shadowsocks config file
 
 function genconf {
+	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
+	[[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
 	echo -n $GEN_SS_CONF
 	for method in $METHODS
 	do
 		echo -n "$method "
-		servers=$(cat $SHADOW_CONF | grep $method)
-		for server in $servers
-		do
-			true
-			# TODO: Generate shadowsocks configure file ...
-		done
+		[[ ! -z $(cat $SHADOW_CONF|grep \($method\)) ]] && {
+			servers=$(cat $SHADOW_CONF|grep \($method\)|sed '$ d')
+			_last=$(cat $SHADOW_CONF|grep \($method\)|tail -n1)
+			echo $SHADOWSOCKS_JSON_PRE > $SHADOW_JSON_DIR$method.conf.tmp
+			for server in $servers
+			do
+				_method=$(echo $server|awk -F "[()]" '{print $2}')
+				_port=$(echo $server|awk -F "[{},]" '{print $2}')
+				_pass=$(echo $server|awk -F "[{},]" '{print $3}')
+				echo "\"$_port\": \"$_pass\"," >> $SHADOW_JSON_DIR$method.conf.tmp
+			done
+			_method=$(echo $_last|awk -F "[()]" '{print $2}')
+			_port=$(echo $_last|awk -F "[{},]" '{print $2}')
+			_pass=$(echo $_last|awk -F "[{},]" '{print $3}')
+			echo "\"$_port\": \"$_pass\"" >> $SHADOW_JSON_DIR$method.conf.tmp
+			echo $SHADOWSOCKS_JSON_EXT >> $SHADOW_JSON_DIR$method.conf.tmp
+			cat $SHADOW_JSON_DIR$method.conf.tmp|sed -e "s/__FAST_OPEN__/$TCP_FAST_OPEN/; s/__METHOD__/$method/;" > $SHADOW_JSON_DIR$method.conf
+			rm $SHADOW_JSON_DIR$method.conf.tmp
+		}
 	done
 	echo $DONE
 }
@@ -53,19 +75,42 @@ function genconf {
 # start: start shadowservers
 
 function start {
+	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
 	genconf
 	echo -n $STARTING_SERVERS
-	for server in $(ls $SHADOW_JSON_DIR)
+	cd $SHADOW_JSON_DIR
+	for server in $(ls)
 	do
-		$SHADOW_CMD$SHADOW_JSON_DIR$server
+		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") > /dev/null
+		echo $(cat $SS_PID) >> $PIDS
+		rm $SS_PID
 	done
 	echo $DONE
 }
 
+function stop {
+	[[ ! -e $PIDS ]] && echo stop: $ERR_NOT_RUNNING && return 1
+	echo -n $STOPPING_SERVERS
+	for kill in $(cat $PIDS)
+	do
+		kill $kill
+	done
+	rm -f $PIDS
+	echo $DONE
+}
+
+function restart {
+	stop; start
+}
+
 function usage {
 	echo '
+shadowmanager is a script to maintaince multiple shadowsocks server with
+different encryption method at a time.
+
+shadowsocks-python is tested and it works.
+
 usage: shadowmanager add <port> <password> <method>
-                     remove <id>
                      start
                      stop
                      restart
@@ -73,16 +118,12 @@ usage: shadowmanager add <port> <password> <method>
 commands explained:
 
 	add:     add a server to shadowmanager handler, accepting 3 parameters,
-	         port, password and method, return 1 int value, server id.
-	remove:  remove a server from shadowmanager handler, accepting 1 paramet
-	         -er, server id, return 1 boolean value, successful or not. 
-	start:   start shadowmanager, no parameters required, return 1 boolean v
-	         -alue, successful or not.
-	stop:    stop shadowmanager, no parameters required, return 1 boolea val
-	         -ue , successful or not.
-	restart: restart shadowmanager, no parameters required, return 1 boolea
-	         value, successful or not.
+	         port, password and method.
+	start:   start shadowmanager, no parameters required.
+	stop:    stop shadowmanager, no parameters required.
+	restart: restart shadowmanager, no parameters required.
 '
 }
 
+ifroot
 $*

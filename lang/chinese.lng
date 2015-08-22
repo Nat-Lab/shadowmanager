@@ -1,0 +1,12 @@
+#!/bin/bash
+PORT_ALREADY_IN_USE="此端口已被占用，请尝试另外一个。"
+SERVER_ADDED="服务器已添加，重启服务器来应用更改。"
+INVALID_CHAR="检测到非法字符，中断操作..."
+GEN_SS_CONF="生成Shadowsocks配置文件..."
+ERR_RUNNING="Shadowmanager 已经在运行。"
+ERR_NOT_RUNNING="Shadowmanager 没有运行。"
+DONE=" done"
+CONTAIN_INVALID_CHARS="您的输入包含非法字符，中断操作..."
+STARTING_SERVERS="启动服务... "
+STOPPING_SERVERS="停止服务... "
+ROOT_REQUIRED="你需要root来运行该脚本。"
