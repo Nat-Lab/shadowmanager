@@ -83,8 +83,8 @@ function start {
 	for server in $(ls)
 	do
 		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
-		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") > 2> $LOGDIR/$_log
-		[[ -z $(cat $SS_PID) ]] && echo $(echo $ERR_CAN_NOT_START && stop && exit 1
+		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") 2> $LOGDIR/$_log
+		[[ -z $(cat $SS_PID) ]] && echo $ERR_CAN_NOT_START && stop && exit 1
 		echo $(cat $SS_PID) >> $PIDS
 		rm $SS_PID
 	done
