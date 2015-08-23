@@ -9,9 +9,6 @@
 . ./lang/$LANGUAGE.lng
 . ./include/*
 
-# add: add a server
-# usage: add <port> <pass> <method>
-
 function ifroot {
 	[[ $CHECK_ROOT == "true" && "$(id -u)" != "0" ]] && {
 		echo $ROOT_REQUIRED
@@ -19,10 +16,14 @@ function ifroot {
 	}
 }
 
+# add: add a server
+# usage: add <port> <pass> <method>
+
 function add {
-	[[ -z $* ]] && usage add && return 1
+	[[ -z $3 ]] && usage && return 1
 	[[ $(verify $*) == "false" ]] && echo $CONTAIN_INVALID_CHARS && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
+	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo $ERR_METHOD_NOT_EXIST|sed -e "s/__METHOD__/$3/") && return 1
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 }
@@ -81,7 +82,9 @@ function start {
 	cd $SHADOW_JSON_DIR
 	for server in $(ls)
 	do
-		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") > /dev/null
+		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
+		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") > 2> $LOGDIR/$_log
+		[[ -z $(cat $SS_PID) ]] && echo $(echo $ERR_CAN_NOT_START && stop && exit 1
 		echo $(cat $SS_PID) >> $PIDS
 		rm $SS_PID
 	done
@@ -126,4 +129,4 @@ commands explained:
 }
 
 ifroot
-$*
+[[ -z $* ]] && usage || $*
