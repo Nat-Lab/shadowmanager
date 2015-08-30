@@ -1,0 +1,24 @@
+#!/bin/bash
+
+[[ ! $LANGUAGE == "chinese" ]] && return 0
+
+function usage {
+echo '
+shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服务器的脚本。
+
+此脚本在 shadowsocks-python 下测试通过。
+
+用法：shadowmanager add <端口> <密码> <加密>
+                    start
+                    stop
+                    restart
+
+参数解释：
+
+	add:     添加一个服务器到 shadowmanager 的管理，需要 3 个参数。端口，
+	         密码，和方法。
+	start:   启动 shadowmanager，无需参数。
+	stop:    停止 shadowmanager，无需参数。
+	restart: 重启 shadowmamager，无需参数。
+'
+}
