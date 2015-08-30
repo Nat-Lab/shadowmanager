@@ -7,7 +7,11 @@
 
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
-. ./include/*
+
+for inc in $(ls ./include/) 
+do
+	. ./include/$inc
+done
 
 function ifroot {
 	[[ $CHECK_ROOT == "true" && "$(id -u)" != "0" ]] && {
@@ -127,6 +131,11 @@ commands explained:
 	restart: restart shadowmanager, no parameters required.
 '
 }
+
+for ovr in $(ls ./override/) 
+do
+        . ./override/$ovr
+done
 
 ifroot
 [[ -z $* ]] && usage || $*
