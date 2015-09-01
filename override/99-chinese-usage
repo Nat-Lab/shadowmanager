@@ -12,6 +12,8 @@ shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服�
                     start
                     stop
                     restart
+                    show
+                    remove <id>
 
 参数解释：
 
@@ -20,5 +22,8 @@ shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	start:   启动 shadowmanager，无需参数。
 	stop:    停止 shadowmanager，无需参数。
 	restart: 重启 shadowmamager，无需参数。
+	show:    显示所有 shadowsocks 服务器，无需参数。
+	remove:  移除指定 ID 的 shadowsocks 服务器，使用 "show" 来查看所有服务
+	         器，需要 1 个参数，服务器 ID。
 '
 }
