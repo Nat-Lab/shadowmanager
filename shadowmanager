@@ -56,7 +56,7 @@ function remove {
 # usage: add <port> <pass> <method>
 
 function add {
-	[[ -z $3 ]] && usage && return 1
+	[[ -z $3 ]] && echo "add: $MISSING_ARGS" && return 1
 	[[ $(verify $*) == "false" ]] && echo $CONTAIN_INVALID_CHARS && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo $PORT_ALREADY_IN_USE && return 1
 	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo $ERR_METHOD_NOT_EXIST|sed -e "s/__METHOD__/$3/") && return 1
