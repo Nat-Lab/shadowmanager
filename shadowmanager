@@ -20,6 +20,38 @@ function ifroot {
 	}
 }
 
+# show: show handling servers
+# usage: show
+
+function show {
+	id=0
+	[[ ! -z $1 ]] && _servers=$SHADOW_CONF.tmp || _servers=$SHADOW_CONF
+	echo "ID	(method){port,password}"
+	for _server in $(cat $_servers)
+	do
+		let id++
+		echo "$id	$_server"
+	done
+}
+
+# remove: remove a handling server
+# usage: remove <id>
+
+function remove {
+	[[ -z $1 ]] && echo "remove: $MISSING_ARGS" && return 1
+	sed -e "${1}d" $SHADOW_CONF > $SHADOW_CONF.tmp
+	show -i
+	read -p "$SAVE_SERVER" yn
+	case $yn in
+		y|Y|yes|Yes)
+			mv $SHADOW_CONF.tmp $SHADOW_CONF
+		;;
+		*)
+			echo "$ABORTED"
+		;;
+	esac
+}
+
 # add: add a server
 # usage: add <port> <pass> <method>
 
@@ -121,6 +153,8 @@ usage: shadowmanager add <port> <password> <method>
                      start
                      stop
                      restart
+                     show
+                     remove <id>
 
 commands explained:
 
@@ -129,6 +163,9 @@ commands explained:
 	start:   start shadowmanager, no parameters required.
 	stop:    stop shadowmanager, no parameters required.
 	restart: restart shadowmanager, no parameters required.
+	show:    show all the servers handling, no parameters required.
+	remove:  remove server with given ID. Use "show" command to show all
+	         servers, accepting 1 parameter, server ID.
 '
 }
 
