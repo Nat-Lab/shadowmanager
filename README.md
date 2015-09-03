@@ -23,3 +23,5 @@ commands explained:
 	show:    show all the servers handling, no parameters required.
 	remove:  remove server with given ID. Use "show" command to show all
 	         servers, accepting 1 parameter, server ID.
+
+LICENSE: MIT License
