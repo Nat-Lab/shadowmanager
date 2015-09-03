@@ -5,6 +5,8 @@
 # usage: shadowmanager <command> [arguments ...]
 # use './shadowmanager usage' for more informations.
 
+cd "$(dirname "$0")"
+
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
 
