@@ -1,8 +1,10 @@
 #!/bin/bash
+cd "$(dirname "$0")"
+
 UPDATE_URL='https://github.com/NATSOFT/shadowmanager/archive/master.zip'
 
 echo "Updating shadowmanager... "
 wget $UPDATE_URL 2> /dev/null > /dev/null 
-tar zxf master.zip 
+unzip master.zip 
 rm master.zip
 echo "Update complete."
