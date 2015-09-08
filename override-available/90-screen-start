@@ -2,6 +2,8 @@
 # This override make shadowmanager start the server use screen instead of daemon.
 
 SHADOW_CMD=$(echo $SHADOW_CMD | sed -e 's/-d start//g;')
+ERR_IN_SCREEN_MODEenglish="You are currently in screen mode, you will have to stop server(s) manualy."
+ERR_IN_SCREEN_MODEchinese="你现在在使用 screen 模式，你需要手动停止服务器。"
 
 function start {
   genconf
@@ -12,4 +14,9 @@ function start {
     screen -dmS shadowsocks-$server $(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/")
   done
   echo $DONE
+}
+
+function stop {
+	eval echo \$ERR_IN_SCREEN_MODE$LANGUAGE
+	return 1
 }
