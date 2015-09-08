@@ -10,6 +10,7 @@ wget $UPDATE_URL 2> /dev/null > /dev/null
 unzip master.zip 
 rm master.zip
 cd shadowmanager-*/
+cp ../../conf/shadowmanager.conf{,.old}
 cp -R . ../../
-echo "Update complete."
+echo "Update complete. Your shadowmanager.conf was moved to shadowmanager.conf.old."
 rm -fr ../../.update
