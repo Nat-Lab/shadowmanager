@@ -1,0 +1,6 @@
+#!/bin/bash
+# This override disable root check in source level.
+
+function ifroot {
+	return 0
+}

@@ -13,4 +13,4 @@ SHADOWSOCKS_JSON_EXT='
     "method": "__METHOD__",
     "fast_open": __FAST_OPEN__
 }'
-INVALID_CHARS="[ ] { } \  , ( )"
+INVALID_CHARS="[ ] { } \  , ( ) __METHOD__ __FAST_OPEN__"

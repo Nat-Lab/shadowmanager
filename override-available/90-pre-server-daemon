@@ -1,0 +1,35 @@
+#!/bin/bash
+# This override makes each server use it own daemon.
+
+SHADOWSOCKS_JSON_PRE='
+{
+    "server": "0.0.0.0",
+'
+SHADOWSOCKS_JSON_EXT='
+    "timeout": 300,
+    "method": "__METHOD__",
+    "fast_open": __FAST_OPEN__
+}'
+
+function genconf {
+  rm -f $SHADOW_JSON_DIR/* 2> /dev/null
+  [[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
+  echo -n "$GEN_SS_CONF"
+  servers=$(cat $SHADOW_CONF)
+  for server in $servers
+  do
+    {
+      _method=$(echo $server|awk -F "[()]" '{print $2}')
+      _port=$(echo $server|awk -F "[{},]" '{print $2}')
+      _pass=$(echo $server|awk -F "[{},]" '{print $3}')
+      echo $SHADOWSOCKS_JSON_PRE > $SHADOW_JSON_DIR$_method-$_port.conf.tmp
+      echo "\"server_port\": $_port," >> $SHADOW_JSON_DIR$_method-$_port.conf.tmp
+      echo "\"password\": \"$_pass\"," >> $SHADOW_JSON_DIR$_method-$_port.conf.tmp
+      echo $SHADOWSOCKS_JSON_EXT >> $SHADOW_JSON_DIR$_method-$_port.conf.tmp
+      cat $SHADOW_JSON_DIR$_method-$_port.conf.tmp|sed -e "s/__FAST_OPEN__/$TCP_FAST_OPEN/; s/__METHOD__/$_method/;" > $SHADOW_JSON_DIR$$_method-$_port.conf
+      rm $SHADOW_JSON_DIR$_method-$_port.conf.tmp
+    } &
+  done
+  wait
+  echo $DONE
+}

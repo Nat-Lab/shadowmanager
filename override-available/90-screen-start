@@ -1,0 +1,15 @@
+#!/bin/bash
+# This override make shadowmanager start the server use screen instead of daemon.
+
+SHADOW_CMD=$(echo $SHADOW_CMD | sed -e 's/-d start//g;')
+
+function start {
+  genconf
+  echo -n "$STARTING_SERVERS"
+  cd $SHADOW_JSON_DIR
+  for server in $(ls)
+  do
+    screen -dmS shadowsocks-$server $(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/")
+  done
+  echo $DONE
+}

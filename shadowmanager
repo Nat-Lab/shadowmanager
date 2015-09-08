@@ -10,7 +10,7 @@ cd "$(dirname "$0")"
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
 
-for inc in $(ls ./include/) 
+for inc in $(ls ./include/)
 do
 	. ./include/$inc
 done
@@ -94,12 +94,10 @@ function genconf {
 				echo $SHADOWSOCKS_JSON_PRE > $SHADOW_JSON_DIR$method.conf.tmp
 				for server in $servers
 				do
-					_method=$(echo $server|awk -F "[()]" '{print $2}')
 					_port=$(echo $server|awk -F "[{},]" '{print $2}')
 					_pass=$(echo $server|awk -F "[{},]" '{print $3}')
 					echo "\"$_port\": \"$_pass\"," >> $SHADOW_JSON_DIR$method.conf.tmp
 				done
-				_method=$(echo $_last|awk -F "[()]" '{print $2}')
 				_port=$(echo $_last|awk -F "[{},]" '{print $2}')
 				_pass=$(echo $_last|awk -F "[{},]" '{print $3}')
 				echo "\"$_port\": \"$_pass\"" >> $SHADOW_JSON_DIR$method.conf.tmp
@@ -173,7 +171,7 @@ commands explained:
 '
 }
 
-for ovr in $(ls ./override/) 
+for ovr in $(ls ./override/)
 do
         . ./override/$ovr
 done
