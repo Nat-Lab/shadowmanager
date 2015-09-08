@@ -1,10 +1,15 @@
 #!/bin/bash
 cd "$(dirname "$0")"
-
+[[ -e .update ]] && rm -fr .update
+mkdir .update
+cd .update 
 UPDATE_URL='https://github.com/NATSOFT/shadowmanager/archive/master.zip'
 
 echo "Updating shadowmanager... "
 wget $UPDATE_URL 2> /dev/null > /dev/null 
 unzip master.zip 
 rm master.zip
+cd shadowmanager-*/
+cp -R . ../../
 echo "Update complete."
+rm -fr ../../.update
