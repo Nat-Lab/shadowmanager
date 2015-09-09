@@ -4,7 +4,7 @@
 
 function interactive {
 	echo "shadowmanager (Interactive mode)"
-	echo "Copyright 2014 MagicNAT Networking"
+	echo "Copyright 2015 MagicNAT Networking"
 	echo "This is free software with ABSOLUTELY NO WARRANTY."
 	while true
 	do
