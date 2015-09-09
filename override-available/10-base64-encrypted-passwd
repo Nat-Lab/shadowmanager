@@ -1,6 +1,12 @@
 #!/bin/bash
 # This override encrypt the server password using base64.
 # This will enable user to use char such as { } , [ ] ( ) in password.
+# Use 'plaintobase64' and 'base64toplain' to convert between base64 and plain text.
+
+CONVERTED_TO_BASE64english="Converted to base64."
+CONVERTED_TO_PLAINenglish="Converted to plain format. If there are illigal chars in password, shadowmanager might not work correctly."
+CONVERTED_TO_BASE64chinese="已转换到base64。"
+CONVERTED_TO_PLAINchinese="已转换到纯文本格式。如果密码中包含非法字符，shadowmanager 可能不能正常工作。"
 
 function genconf {
 	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
@@ -54,4 +60,32 @@ function show {
     _pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 -D)
 		echo "$id	($_method){$_port,$_pass}"
 	done
+}
+
+function base64toplain {
+	_servers=$SHADOW_CONF
+	[[ -e $SHADOW_CONF.tmp ]] && rm $SHADOW_CONF.tmp
+	for _server in $(cat $_servers)
+	do
+		_method=$(echo $_server|awk -F "[()]" '{print $2}')
+		_port=$(echo $_server|awk -F "[{},]" '{print $2}')
+		_pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 -D)
+		echo "$id	($_method){$_port,$_pass}" >> $SHADOW_CONF.tmp
+	done
+	mv $SHADOW_CONF.tmp $SHADOW_CONF
+	eval echo \$CONVERTED_TO_PLAIN$LANGUAGE
+}
+
+function plaintobase64 {
+	_servers=$SHADOW_CONF
+	[[ -e $SHADOW_CONF.tmp ]] && rm $SHADOW_CONF.tmp
+	for _server in $(cat $_servers)
+	do
+		_method=$(echo $_server|awk -F "[()]" '{print $2}')
+		_port=$(echo $_server|awk -F "[{},]" '{print $2}')
+		_pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64)
+		echo "$id	($_method){$_port,$_pass}" >> $SHADOW_CONF.tmp
+	done
+	mv $SHADOW_CONF.tmp $SHADOW_CONF
+	eval echo \$CONVERTED_TO_BASE64$LANGUAGE
 }
