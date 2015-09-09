@@ -1,0 +1,31 @@
+#!/bin/bash
+# This override take control of shadowmanager, and entering an interactive shell.
+# This override shold have the highest priority (override at last).
+
+function interactive {
+	echo "shadowmanager (Interactive mode)"
+	echo "Copyright 2014 MagicNAT Networking"
+	echo "This is free software with ABSOLUTELY NO WARRANTY."
+	while true
+	do
+		echo -n "$(whoami)@shadowmanager> "; read cmd;
+		shadowmanager_exec $cmd
+	done
+}
+
+function shadowmanager_exec {
+	if [[ ! -z $cmd ]]
+	then
+		exe=$(echo $cmd | awk '{print $1}')
+		if ! type "$exe" > /dev/null 2> /dev/null
+		then
+			echo "shadowmanager: command not found: $exe"
+			return 127
+		else
+			eval $cmd
+		fi
+	fi
+}
+
+interactive
+exit $?
