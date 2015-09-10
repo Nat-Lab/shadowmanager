@@ -43,6 +43,10 @@ Official overrides list:
 	99-chinese-usage: This is an override that change the 'usage' command when the language is Chinese.
 	zz-interactive-mode: This makes shadowmanager run as an interactive shell. This is not recommend because it is not likely to work properly. However, this might be useful sometime.
 
+### Hooks
+
+Hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.
+
 ### License
 
 MIT License
