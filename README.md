@@ -35,6 +35,7 @@ Official overrides list:
 
 	00-no-root: An override to disable root check by override root check function. Useful when needs to disable root check temporary.
 	10-base64-encrypted-passwd: Use base64 to store shadowsocks servers' passwords. This is useful when you need to some chars like ',' '(' or ')' in password.
+	20-json-to-shadowmanager: This override provides a command 'json2manager'. It enable user to convert shadowsocks json configure files to shadowmanager configure file.
 	30-generate-qr-code: Generate QR codes for servers in the shadowmanager. 
 	40-randpass: Add a command 'add-randpass' to shadowmanager which enable users to add a shadowsocks server with random password.
 	90-pre-server-daemon: Use separated process to serve different servers. This is useful when you needs to stat the traffic of each server separately.

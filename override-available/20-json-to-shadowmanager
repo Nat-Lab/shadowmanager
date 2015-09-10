@@ -1,0 +1,18 @@
+#!/bin/bash
+# This override eanble shadowmanager to convert .json shadowsocks configure file to shadowmanager configure file.
+# usage: ./shadowmanager json2manager <json_file> <output_file>
+
+function json2manager {
+	[[ -z $3 ]] && echo "usage: ./shadowmanager json2manager <encrypt_method> <json_file> <output_file>" && return 1
+	_method=$1
+	_accts=$(cat $2 | tr -d '\n' | awk -F'"port_password": {|}' '{print $2}'| tr -d '" ' | tr "," " ")
+	mv $SHADOW_CONF $SHADOW_CONF.$$.bak
+	for _acct in $_accts
+	do
+		_port=$(echo $_acct|awk -F: '{print $1}')
+		_pass=$(echo $_acct|awk -F: '{print $2}')
+		add $_port $_pass $_method # Using add instead of creating configure, because base64.
+	done
+	mv $SHADOW_CONF $3
+	mv $SHADOW_CONF.$$.bak $SHADOW_CONF
+}
