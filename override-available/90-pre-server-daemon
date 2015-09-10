@@ -12,6 +12,7 @@ SHADOWSOCKS_JSON_EXT='
 }'
 
 function genconf {
+  hook pre-genconf
   rm -f $SHADOW_JSON_DIR/* 2> /dev/null
   [[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
   echo -n "$GEN_SS_CONF"
@@ -32,4 +33,5 @@ function genconf {
   done
   wait
   echo $DONE
+  hook post-genconf
 }
