@@ -1,0 +1,23 @@
+#!/bin/bash
+# This override enable users to generate QR code for their shadowsocks servers.
+# dependency: qrencode
+# usage: generate-qr <output-dir>
+
+function _getqr {
+    qrencode -l L -o $1 $2
+}
+
+function generate-qr {
+  [[ -z $2 ]] && echo "usage: generate-qr <output-dir> <hostname>" && return 1
+  [[ ! -e $1 ]] && mkdir $1
+  servers=$(show|sed '1d') # using show instead of reading the configure file here, because some users prefer base64 encrypted password.
+  for server in $servers
+  do
+    _method=$(echo $server|awk -F "[()]" '{print $2}')
+    _port=$(echo $server|awk -F "[{},]" '{print $2}')
+    _pass=$(echo $server|awk -F "[{},]" '{print $3}')
+    _server_str="$(echo $_method:$_pass@$2:$_port|base64)"
+    _getqr $1/$_port.png "ss://$_server_str"
+  done
+  echo "Finished generate QR codes."
+}
