@@ -48,6 +48,12 @@ Official overrides list:
 
 Hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.
 
+Hooks can also be add by the non-original implements. (i.e. overrides, implements, and even hooks itself!) 
+
+	usage: hook <hooked_function>
+	
+Hook command will check if the function is exist, and execute it if exist. 
+
 ### License
 
 MIT License
