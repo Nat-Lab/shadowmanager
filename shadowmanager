@@ -111,6 +111,10 @@ function genconf {
 	echo $DONE
 }
 
+function status {
+	[[ -e $PIDS ]] && echo $SHADOWMANAGER_RUNNING || echo $SHADOWMANAGER_NOT_RUNNING
+}
+
 # start: start shadowservers
 
 function start {
