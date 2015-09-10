@@ -12,6 +12,7 @@ function init-timelim {
 }
 
 function pre-add {
+	hook timelim-add
 	_time=$(date +%s)
 	read -p "Account duration(hrs)? " dur
 	let _dur=$_dur*3600
@@ -20,6 +21,7 @@ function pre-add {
 }
 
 function timelim-update {
+	hook timelim-corn
 	id=0
 	_now=$(date +%s)
 	_restart=no
