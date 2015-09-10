@@ -11,7 +11,7 @@ ShadowManager is a script to maintaince multiple shadowsocks server with differe
 	                     start
 	                     stop
 	                     restart
-                             status
+	                     status
 	                     show
 	                     remove <id>
 
