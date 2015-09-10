@@ -22,11 +22,11 @@ function genconf {
 				for server in $servers
 				do
 					_port=$(echo $server|awk -F "[{},]" '{print $2}')
-					_pass=$(echo $server|awk -F "[{},]" '{print $3}'|base64 -D)
+					_pass=$(echo $server|awk -F "[{},]" '{print $3}'|base64 --decode)
 					echo "\"$_port\": \"$_pass\"," >> $SHADOW_JSON_DIR$method.conf.tmp
 				done
 				_port=$(echo $_last|awk -F "[{},]" '{print $2}')
-				_pass=$(echo $_last|awk -F "[{},]" '{print $3}'|base64 -D)
+				_pass=$(echo $_last|awk -F "[{},]" '{print $3}'|base64 --decode)
 				echo "\"$_port\": \"$_pass\"" >> $SHADOW_JSON_DIR$method.conf.tmp
 				echo $SHADOWSOCKS_JSON_EXT >> $SHADOW_JSON_DIR$method.conf.tmp
 				cat $SHADOW_JSON_DIR$method.conf.tmp|sed -e "s/__FAST_OPEN__/$TCP_FAST_OPEN/; s/__METHOD__/$method/;" > $SHADOW_JSON_DIR$method.conf
@@ -57,7 +57,7 @@ function show {
 		let id++
     _method=$(echo $_server|awk -F "[()]" '{print $2}')
     _port=$(echo $_server|awk -F "[{},]" '{print $2}')
-    _pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 -D)
+    _pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 --decode)
 		echo "$id	($_method){$_port,$_pass}"
 	done
 }
@@ -69,7 +69,7 @@ function base64toplain {
 	do
 		_method=$(echo $_server|awk -F "[()]" '{print $2}')
 		_port=$(echo $_server|awk -F "[{},]" '{print $2}')
-		_pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 -D)
+		_pass=$(echo $_server|awk -F "[{},]" '{print $3}'|base64 --decode)
 		echo "$id	($_method){$_port,$_pass}" >> $SHADOW_CONF.tmp
 	done
 	mv $SHADOW_CONF.tmp $SHADOW_CONF
