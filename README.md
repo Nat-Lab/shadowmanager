@@ -29,7 +29,7 @@ commands explained:
 
 To change the way that shadowmanager act which not able to be adjust in configure file, the overrides and includes might be needed. The former one read after the shdowmanager script loaded, the latter one read before it.
 
-The two chars before every override. They stand for override priority. The priority are ranked from 00 to zz, later the char, higher the priority.
+There are two chars before every override. They stand for override priority. The priority are ranked from 00 to zz, later the char, higher the priority.
 
 Official overrides list:
 
