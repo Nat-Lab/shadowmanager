@@ -36,9 +36,9 @@ Official overrides list:
 	00-no-root: An override to disable root check by override root check function. Useful when needs to disable root check temporary.
 	10-base64-encrypted-passwd: Use base64 to store shadowsocks servers' passwords. This is useful when you need to some chars like ',' '(' or ')' in password.
 	20-json-to-shadowmanager: This override provides a command 'json2manager'. It enable user to convert shadowsocks json configure files to shadowmanager configure file.
-	30-generate-qr-code: Generate QR codes for servers in the shadowmanager. 
+	30-generate-qr-code: Generate QR codes for servers in the shadowmanager.
 	40-randpass: Add a command 'add-randpass' to shadowmanager which enable users to add a shadowsocks server with random password.
-	70-time-limit: Limit the time of each shadowsocks server can use in hours. This override will hooks pre-add events so make sure you are not using some override that remove pre-add events. Cronjob will be added to check the status and remove expired accounts. 
+	70-time-limit: Limit the time of each shadowsocks server can use in hours. This override will hooks pre-add events so make sure you are not using some override that remove pre-add events. Cronjob will be added to check the status and remove expired accounts.
 	90-pre-server-daemon: Use separated process to serve different servers. This is useful when you needs to stat the traffic of each server separately.
 	90-screen-start: This override change the original implement of the 'start' command. By using this override, the shadowsocks servers will be start using screen instead of running background as daemon. You might want to use this if you wants shadowsocks logs.
 	99-chinese-usage: This is an override that change the 'usage' command when the language is Chinese.
@@ -49,11 +49,11 @@ Official overrides list:
 
 Hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.
 
-Hooks can also be add by the non-original implements. (i.e. overrides, implements, and even hooks itself!) 
+Hooks can also be add by the non-original implements. (i.e. overrides, includes, and even hooks itself!) 
 
 	usage: hook <hooked_function>
-	
-Hook command will check if the function is exist, and execute it if exist. 
+
+Hook command will check if the function is exist, and execute it if exist.
 
 ### License
 
