@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function post-start {
+  return 0
+}

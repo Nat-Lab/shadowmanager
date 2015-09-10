@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function pre-genconf {
+  return 0
+}

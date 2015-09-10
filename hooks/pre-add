@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function pre-add {
+  return 0
+}

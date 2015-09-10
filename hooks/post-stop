@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function post-genconf {
+  return 0
+}

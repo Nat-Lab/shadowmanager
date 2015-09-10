@@ -1,0 +1,5 @@
+#!/bin/bash
+
+function post-add {
+  return 0
+}
