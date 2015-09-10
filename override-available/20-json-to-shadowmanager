@@ -11,7 +11,7 @@ function json2manager {
 	do
 		_port=$(echo $_acct|awk -F: '{print $1}')
 		_pass=$(echo $_acct|awk -F: '{print $2}')
-		add $_port $_pass $_method # Using add instead of creating configure, because base64.
+		add $_port $_pass $_method > /dev/null # Using add instead of creating configure, because base64.
 	done
 	mv $SHADOW_CONF $3
 	mv $SHADOW_CONF.$$.bak $SHADOW_CONF
