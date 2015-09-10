@@ -41,12 +41,12 @@ function genconf {
 }
 
 function add {
-	hook pre-add
   _pass=$(echo $2 | base64)
 	[[ -z $3 ]] && echo "add: $MISSING_ARGS" && return 1
 	[[ $(verify $1 $3) == "false" ]] && echo "$CONTAIN_INVALID_CHARS" && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo "$PORT_ALREADY_IN_USE" && return 1
 	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo "$ERR_METHOD_NOT_EXIST"|sed -e "s/__METHOD__/$3/") && return 1
+	hook pre-add
 	echo "($3){$1,$_pass}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 	hook post-add

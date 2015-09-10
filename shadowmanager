@@ -69,11 +69,11 @@ function remove {
 # usage: add <port> <pass> <method>
 
 function add {
-	hook pre-add
 	[[ -z $3 ]] && echo "add: $MISSING_ARGS" && return 1
 	[[ $(verify $*) == "false" ]] && echo "$CONTAIN_INVALID_CHARS" && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo "$PORT_ALREADY_IN_USE" && return 1
 	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo "$ERR_METHOD_NOT_EXIST"|sed -e "s/__METHOD__/$3/") && return 1
+	hook pre-add
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 	hook post-add
@@ -133,12 +133,12 @@ function status {
 # start: start shadowservers
 
 function start {
-	hook pre-start
 	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
 	genconf
 	[[ ! -e $LOGDIR ]] && mkdir $LOGDIR
 	echo -n "$STARTING_SERVERS"
 	cd $SHADOW_JSON_DIR
+	hook pre-start
 	for server in $(ls)
 	do
 		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
@@ -152,8 +152,8 @@ function start {
 }
 
 function stop {
-	hook pre-stop
 	[[ ! -e $PIDS ]] && echo stop: $ERR_NOT_RUNNING && return 1
+	hook pre-stop
 	echo -n "$STOPPING_SERVERS"
 	for kill in $(cat $PIDS)
 	do
