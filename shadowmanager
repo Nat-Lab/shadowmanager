@@ -116,7 +116,7 @@ function genconf {
 function start {
 	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
 	genconf
-	[[ ! -e log ]] && mkdir log
+	[[ ! -e $LOGDIR ]] && mkdir $LOGDIR
 	echo -n "$STARTING_SERVERS"
 	cd $SHADOW_JSON_DIR
 	for server in $(ls)
