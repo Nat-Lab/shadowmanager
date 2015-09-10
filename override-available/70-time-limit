@@ -1,0 +1,41 @@
+#!/bin/bash
+
+INVALID_CHARS="$INVALID_CHARS |"
+
+function init-timelim {
+	[[ -e .cron.tmp ]] && return 0
+	echo "Installing timelim..."
+	touch .timelim
+	crontab -l > .cron.tmp
+	echo "00 * * * * $0 timelim-update"
+	[[ -e $SHADOW_CONF ]] && echo "SHADOW_CONF already exist... Might cause problems."
+}
+
+function pre-add {
+	_time=$(date +%s)
+	read -p "Account duration(hrs)? " dur
+	let _dur=$_dur*3600
+	let _endtime=$_time+$_dur
+	echo -n "$_dur|" >> $SHADOW_CONF
+}
+
+function timelim-update {
+	id=0
+	_now=$(date +%s)
+	_restart=no
+	for _server in $(cat $_servers)
+	do
+		let $id++
+		_this_due=$(echo $_server | awk -F"|" '{print $1}')
+		[[ $_this_due -gt $_now ]] && {
+			echo "$_server has expired. Moved to $SHADOW_CONF.disabled"
+			_restart=yes
+			echo $_server >> $SHADOW_CONF.disabled 
+			sed -e "${id}d" $SHADOW_CONF > $SHADOW_CONF.tmp
+			mv $SHADOW_CONF.tmp $SHADOW_CONF
+		}
+	done
+	[[ $_restart == "yes" ]] && restart
+}
+
+init-timelim
