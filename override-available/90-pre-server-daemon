@@ -15,7 +15,7 @@ function genconf {
   rm -f $SHADOW_JSON_DIR/* 2> /dev/null
   [[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
   echo -n "$GEN_SS_CONF"
-  servers=$(cat $SHADOW_CONF)
+  servers=$(show|sed '1d') # using show instead of reading the configure file here, because some users prefer base64 encrypted password.
   for server in $servers
   do
     {
