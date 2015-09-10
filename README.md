@@ -5,7 +5,7 @@ Copyright MagicNAT 2015
 
 ### Usage
 
-ShadowManager is a script to maintaince multiple shadowsocks server with different encryption method at a time.
+ShadowManager is a lightweight, extendible script to maintaince multiple shadowsocks server with different encryption method at a time.
 
 	usage: shadowmanager add <port> <password> <method>
 	                     start
