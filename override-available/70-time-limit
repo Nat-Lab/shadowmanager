@@ -6,7 +6,7 @@ function init-timelim {
 	[[ -e .cron.tmp ]] && return 0
 	echo "Installing timelim..."
 	touch .timelim
-	crontab -l > .cron.tmp
+	crontab -l >> .cron.tmp
 	echo "00 * * * * $0 timelim-update"
 	[[ -e $SHADOW_CONF ]] && echo "SHADOW_CONF already exist... Might cause problems."
 }
