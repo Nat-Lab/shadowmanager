@@ -1,0 +1,17 @@
+#!/bin/bash
+# This override allow users to generate random passwords for their shadowsocks servers.
+# usage: add-randpass <port> <method> [password-lenght]
+
+DEFAULT_PASSWD_LEN=32
+
+function _getrandpass {
+	# We are using LC_CTYPE=C here to makes OSX etc works porperly.
+	[[ -z $1 ]] && LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $DEFAULT_PASSWD_LEN || LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $1
+}
+
+function add-randpass {
+	[[ -z $2 ]] && echo -e "usage: add-randpass <port> <method> [password-lenght]\nThe default password lenght is $DEFAULT_PASSWD_LEN." && return 1
+	_pass=$(_getrandpass $3)
+	echo "Password generated: $_pass"
+	add $1 $_pass $2
+}

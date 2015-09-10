@@ -35,6 +35,7 @@ Official overrides list:
 
 	00-no-root: An override to disable root check by override root check function. Useful when needs to disable root check temporary.
 	10-base64-encrypted-passwd: Use base64 to store shadowsocks servers' passwords. This is useful when you need to some chars like ',' '(' or ')' in password.
+	40-randpass: Add a command 'add-randpass' to shadowmanager which enable users to add a shadowsocks server with random password.
 	90-pre-server-daemon: Use separated process to serve different servers. This is useful when you needs to stat the traffic of each server separately.
 	90-screen-start: This override change the original implement of the 'start' command. By using this override, the shadowsocks servers will be start using screen instead of running background as daemon. You might want to use this if you wants shadowsocks logs.
 	99-chinese-usage: This is an override that change the 'usage' command when the language is Chinese.
