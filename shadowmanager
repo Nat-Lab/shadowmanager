@@ -15,6 +15,17 @@ do
 	. ./include/$inc
 done
 
+for _hook in $(ls ./hooks/)
+do
+	. ./hooks/$_hook
+done
+
+function hook {
+	declare -F $1 > /dev/null
+	[[ ! $? == 0 ]] && return 0
+	$1
+}
+
 function ifroot {
 	[[ $CHECK_ROOT == "true" && "$(id -u)" != "0" ]] && {
 		echo "$ROOT_REQUIRED"
@@ -58,12 +69,14 @@ function remove {
 # usage: add <port> <pass> <method>
 
 function add {
+	hook pre-add
 	[[ -z $3 ]] && echo "add: $MISSING_ARGS" && return 1
 	[[ $(verify $*) == "false" ]] && echo "$CONTAIN_INVALID_CHARS" && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo "$PORT_ALREADY_IN_USE" && return 1
 	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo "$ERR_METHOD_NOT_EXIST"|sed -e "s/__METHOD__/$3/") && return 1
 	echo "($3){$1,$2}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
+	hook post-add
 }
 
 # verify: verify if the input is valid
@@ -82,6 +95,7 @@ function verify {
 # genconf: generate the shadowsocks config file
 
 function genconf {
+	hook pre-genconf
 	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
 	[[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
 	echo -n "$GEN_SS_CONF"
@@ -109,6 +123,7 @@ function genconf {
 	done
 	wait
 	echo $DONE
+	hook post-genconf
 }
 
 function status {
@@ -118,6 +133,7 @@ function status {
 # start: start shadowservers
 
 function start {
+	hook pre-start
 	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
 	genconf
 	[[ ! -e $LOGDIR ]] && mkdir $LOGDIR
@@ -132,9 +148,11 @@ function start {
 		rm $SS_PID
 	done
 	echo $DONE
+	hook post-start
 }
 
 function stop {
+	hook pre-stop
 	[[ ! -e $PIDS ]] && echo stop: $ERR_NOT_RUNNING && return 1
 	echo -n "$STOPPING_SERVERS"
 	for kill in $(cat $PIDS)
@@ -143,6 +161,7 @@ function stop {
 	done
 	rm -f $PIDS
 	echo $DONE
+	hook post-stop
 }
 
 function restart {
