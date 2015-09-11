@@ -8,6 +8,9 @@ CONVERTED_TO_PLAINenglish="Converted to plain format. If there are illigal chars
 CONVERTED_TO_BASE64chinese="已转换到base64。"
 CONVERTED_TO_PLAINchinese="已转换到纯文本格式。如果密码中包含非法字符，shadowmanager 可能不能正常工作。"
 
+echo "	plaintobase64: convert shadowmanager configure file from plain format to base64." | add-help
+echo "	base64toplain: convert shadowmanager configure file from base64 format to plain." | add-help
+
 function genconf {
 	hook pre-genconf
 	rm -f $SHADOW_JSON_DIR/* 2> /dev/null

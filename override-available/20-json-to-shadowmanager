@@ -2,6 +2,9 @@
 # This override eanble shadowmanager to convert .json shadowsocks configure file to shadowmanager configure file.
 # usage: ./shadowmanager json2manager <json_file> <output_file>
 
+echo "	json2manager: convert .json shadowsocks configure file to shadowmanager configure file." | add-help
+echo "	json2manager <encrypt_method> <json_file> <output_file>" | add-usage
+
 function json2manager {
 	[[ -z $3 ]] && echo "usage: ./shadowmanager json2manager <encrypt_method> <json_file> <output_file>" && return 1
 	_method=$1

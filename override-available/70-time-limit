@@ -1,5 +1,5 @@
 #!/bin/bash
-# This override provide a timer, and limit the time of each shadowsocks server can use in hours. This override will hooks pre-add events so make sure you are not using some override that remove pre-add events. Cronjob will be added to check the status and remove expired accounts. 
+# This override provide a timer, and limit the time of each shadowsocks server can use in hours. This override will hooks pre-add events so make sure you are not using some override that remove pre-add events. Cronjob will be added to check the status and remove expired accounts.
 # Two hookers are provided in this override. timelim-add, which call when pre-add. timelim-corn, which call when cronjob execute.
 
 INVALID_CHARS="$INVALID_CHARS |"
@@ -34,7 +34,7 @@ function timelim-update {
 		[[ $_this_due -gt $_now ]] && {
 			echo "$_server has expired. Moved to $SHADOW_CONF.disabled"
 			_restart=yes
-			echo $_server >> $SHADOW_CONF.disabled 
+			echo $_server >> $SHADOW_CONF.disabled
 			sed -e "${id}d" $SHADOW_CONF > $SHADOW_CONF.tmp
 			mv $SHADOW_CONF.tmp $SHADOW_CONF
 		}

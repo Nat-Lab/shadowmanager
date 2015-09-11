@@ -1,0 +1,14 @@
+#!/bin/bash
+# Shadowmanager extrahelp initnalize script
+rm .shadowmanager.extrahelp .shadowmanager.extrausage 2> /dev/null
+
+# add-help: add usage
+# add-help will receive input in stdin, so pipe your help texts.
+# echo '....' | add-help
+function add-help {
+  cat >> .shadowmanager.extrahelp
+}
+
+function add-usage {
+  cat >> .shadowmanager.extrausage
+}

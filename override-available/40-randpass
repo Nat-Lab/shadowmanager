@@ -4,6 +4,9 @@
 
 DEFAULT_PASSWD_LEN=32
 
+echo "	add-randpass: add a server with a random password." | add-help
+echo "	add-randpass <port> <method> [password_len]" | add-usage
+
 function _getrandpass {
 	# We are using LC_CTYPE=C here to makes OSX etc works porperly.
 	[[ -z $1 ]] && LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $DEFAULT_PASSWD_LEN || LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $1

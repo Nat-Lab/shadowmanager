@@ -199,6 +199,19 @@ commands explained:
 	remove:  remove server with given ID. Use "show" command to show all
 	         servers, accepting 1 parameter, server ID.
 '
+	_show-extra-helps
+}
+
+function _show-extra-helps {
+	[[ -e .shadowmanager.extrahelp ]] && {
+		echo $USAGE_EXTRA; echo
+		cat .shadowmanager.extrausage
+	}
+	echo
+	[[ -e .shadowmanager.extrahelp ]] && {
+	echo $HELP_EXTRA; echo
+	cat .shadowmanager.extrahelp
+	}
 }
 
 for ovr in $(ls ./override/)
