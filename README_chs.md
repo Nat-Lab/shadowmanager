@@ -26,7 +26,7 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	show:    显示所有 shadowsocks 服务器，无需参数。
 	remove:  移除指定 ID 的 shadowsocks 服务器，使用 "show" 来查看所有服务器，需要 1 个参数，服务器 ID。
 
-### 覆写（Overrides）与包含（Includes）
+### 覆写（Overrides），包含（Includes）与钩子（Hooks）
 
 倘若要修改那些未在 Shadowmanager 中给出选项的行为，则可能会需要覆写与包含。前一个在 shdowmanager 载入后读取，后一个在 shadowsocks 载入之前。
 
@@ -46,8 +46,6 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	aa-wizard：为 shadowmanager 的服务器添加、服务器移除等操作提供一个向导。
 	zz-interactive-mode：这个覆写会使得 shadowmanager 以交互式模式启动。该方法可能会引起一些问题，故不推荐。
 
-### 钩子（Hooks）
-
 钩子是在特定行为执行前后运行的函数。这些钩子可以在 hooks/ 中定义。某些覆写可能会按需修改钩子来达成某些目的。
 
 在非原版的实现中也可以定义钩子。 （例如 覆写, 包含, 甚至钩子本身！） 
@@ -55,6 +53,11 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	usage: hook <hooked_function>
 	
 Hook 命令会检测函数是否存在，若存在则会将其执行。
+
+若想要添加您自己的命令用法与解释至 shadowmanager，您可以使用 'add-help' 与 'add-usage'。这两个命令都会从标准输入读取输入。
+
+	usage: echo '	<your-command>: <your-explaination>' | add-help
+	usage: echo '	<your-command>: command-name <parameters>' | add-usage
 
 ### 协议
 

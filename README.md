@@ -25,7 +25,7 @@ commands explained:
 	show:    show all the servers handling, no parameters required.
 	remove:  remove server with given ID. Use "show" command to show all servers, accepting 1 parameter, server ID.
 
-### Overrides & Includes
+### Overrides, Includes and Hooks
 
 To change the way that shadowmanager act which not able to be adjust in configure file, the overrides and includes might be needed. The former one read after the shdowmanager script loaded, the latter one read before it.
 
@@ -45,15 +45,18 @@ Official overrides list:
 	aa-wizard: Add a wizard to shadowmanager for adding servers, removing servers etc.
 	zz-interactive-mode: This makes shadowmanager run as an interactive shell. This is not recommend because it is not likely to work properly. However, this might be useful sometime.
 
-### Hooks
-
-Hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.
+And hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.
 
 Hooks can also be add by the non-original implements. (i.e. overrides, includes, and even hooks itself!) 
 
 	usage: hook <hooked_function>
 
 Hook command will check if the function is exist, and execute it if exist.
+
+To make you usages and explanations into shadowmanager, use 'add-help' and 'add-usage'. Both two of them accept inputs from stdin.
+
+	usage: echo '	<your-command>: <your-explaination>' | add-help
+	usage: echo '	<your-command>: command-name <parameters>' | add-usage
 
 ### License
 
