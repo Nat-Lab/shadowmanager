@@ -14,6 +14,8 @@ ShadowManager is a lightweight, extendible script to maintaince multiple shadows
 	                     status
 	                     show
 	                     remove <id>
+	                     enovr [overrides ...]
+	                     disovr [overrides ...]
 
 commands explained:
 
@@ -24,6 +26,8 @@ commands explained:
 	status:  show shadowmanager running status, no parameters required.
 	show:    show all the servers handling, no parameters required.
 	remove:  remove server with given ID. Use "show" command to show all servers, accepting 1 parameter, server ID.
+	enovr:   enable one or more overrides, accepting override names as parameters (optional).
+	disovr:  disable one or more overrides, accepting override names as parameters (optional).
 
 ### Overrides, Includes and Hooks
 

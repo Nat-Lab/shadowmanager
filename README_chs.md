@@ -15,6 +15,8 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	                     status
 	                     show
 	                     remove <id>
+	                     enovr [overrides ...]
+	                     disovr [overrides ...]
 
 命令注解：
 
@@ -25,6 +27,8 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	status:  检视 shadowmanager 状态，无需参数。
 	show:    显示所有 shadowsocks 服务器，无需参数。
 	remove:  移除指定 ID 的 shadowsocks 服务器，使用 "show" 来查看所有服务器，需要 1 个参数，服务器 ID。
+	enovr:   启用一个或多个覆写，可将覆写名作为参数（可选）。
+	disovr:  禁用一个或多个覆写，可将覆写名作为参数（可选）。
 
 ### 覆写（Overrides），包含（Includes）与钩子（Hooks）
 
