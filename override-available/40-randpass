@@ -6,6 +6,9 @@ DEFAULT_PASSWD_LEN=32
 
 echo "	add-randpass: add a server with a random password." | add-help
 echo "	add-randpass <port> <method> [password_len]" | add-usage
+echo "	add-randpass: 添加一个随机密码的服务器。" | add-help chinese
+echo "	add-randpass <端口> <加密方法> [密码长度]" | add-usage chinese
+
 
 function _getrandpass {
 	# We are using LC_CTYPE=C here to makes OSX etc works porperly.

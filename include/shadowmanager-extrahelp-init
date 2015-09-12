@@ -1,14 +1,37 @@
 #!/bin/bash
 # Shadowmanager extrahelp initnalize script
-rm .shadowmanager.extrahelp .shadowmanager.extrausage 2> /dev/null
+rm .shadowmanager.extrahelp.* .shadowmanager.extrausage.* 2> /dev/null
 
 # add-help: add usage
 # add-help will receive input in stdin, so pipe your help texts.
-# echo '....' | add-help
+# echo '....' | add-help [language]
 function add-help {
-  cat >> .shadowmanager.extrahelp
+  [[ ! -z $1 ]] && _helplang=$1 || _helplang=general
+  cat >> .shadowmanager.extrahelp.$_helplang
 }
 
 function add-usage {
-  cat >> .shadowmanager.extrausage
+  [[ ! -z $1 ]] && _helplang=$1 || _helplang=general
+  cat >> .shadowmanager.extrausage.$_helplang
+}
+
+function _show-extra-helps {
+	[[ -e .shadowmanager.extrausage.$LANGUAGE ]] && {
+		echo $USAGE_EXTRA; echo
+		cat .shadowmanager.extrausage.$LANGUAGE; echo
+	} || {
+		[[ -e .shadowmanager.extrausage.general ]] && {
+			echo $USAGE_EXTRA; echo
+			cat .shadowmanager.extrausage.general; echo
+		}
+	}
+	[[ -e .shadowmanager.extrahelp.$LANGUAGE ]] && {
+		echo $HELP_EXTRA; echo
+		cat .shadowmanager.extrahelp.$LANGUAGE; echo
+	} || {
+		[[ -e .shadowmanager.extrahelp.general ]] && {
+			echo $USAGE_EXTRA; echo
+			cat .shadowmanager.extrahelp.general; echo
+		}
+	}
 }

@@ -208,17 +208,6 @@ commands explained:
 	_show-extra-helps
 }
 
-function _show-extra-helps {
-	[[ -e .shadowmanager.extrahelp ]] && {
-		echo $USAGE_EXTRA; echo
-		cat .shadowmanager.extrausage; echo
-	}
-	[[ -e .shadowmanager.extrahelp ]] && {
-	echo $HELP_EXTRA; echo
-	cat .shadowmanager.extrahelp; echo
-	}
-}
-
 for ovr in $(ls ./override/)
 do
         . ./override/$ovr

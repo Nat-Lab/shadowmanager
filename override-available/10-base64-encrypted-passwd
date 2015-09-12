@@ -10,6 +10,8 @@ CONVERTED_TO_PLAINchinese="已转换到纯文本格式。如果密码中包含�
 
 echo "	plaintobase64: convert shadowmanager configure file from plain format to base64." | add-help
 echo "	base64toplain: convert shadowmanager configure file from base64 format to plain." | add-help
+echo "	plaintobase64: 将 shadowmanager 的配置文件从纯文本转换到 base64 格式。" | add-help chinese
+echo "	base64toplain: 将 shadowmanager 的配置文件从 base64 转换到纯文本格式。" | add-help chinese
 
 function genconf {
 	hook pre-genconf
