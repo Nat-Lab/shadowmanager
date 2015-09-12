@@ -18,8 +18,8 @@ function pre-add {
 	_time=$(date +%s)
 	read -p "Account duration(hrs)? " dur
 	let _dur=$_dur*3600
-	let _endtime=$_time+$_dur
-	echo -n "$_dur|" >> $SHADOW_CONF
+	let _due=$_time+$_dur
+	echo -n "$_due|" >> $SHADOW_CONF
 }
 
 function timelim-update {
