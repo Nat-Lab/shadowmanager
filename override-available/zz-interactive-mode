@@ -2,14 +2,54 @@
 # This override take control of shadowmanager, and entering an interactive shell.
 # This override shold have the highest priority (override at last).
 
+function help {
+	echo "shadowmanager debug console commands: "
+	echo
+	echo "	sminfo: Show the basic shadowmanager informations."
+	echo "	set: set a variable with given value."
+	echo "	     usage: set <var> [value]"
+	echo "	reload: reload shadowmanager with current environment."
+}
+
+function reload {
+	cd "$(dirname "$0")"
+
+	. ./lang/$LANGUAGE.lng
+
+	for inc in $(ls ./include/)
+	do
+		. ./include/$inc
+	done
+
+	for _hook in $(ls ./hooks/)
+	do
+		. ./hooks/$_hook
+	done
+
+	for ovr in $(ls ./override/)
+	do
+		. ./override/$ovr
+	done
+}
+
+function set {
+	[[ -z $1 ]] && declare && return 0
+	[[ -z $2 ]] && unset $1 && return 0
+	eval $1="$2"
+}
+
+function sminfo {
+        echo "shadowmanager (Interactive mode)"
+        echo "Copyright 2015 MagicNAT Networking"
+        echo "This is free software with ABSOLUTELY NO WARRANTY."
+        echo "Loaded override: $(ls ./override/|tr '\n' ' ')"
+        echo "Included files: $(ls ./include/|tr '\n' ' ')"
+        echo "Language: $LANGUAGE"
+        echo "type 'help' for help."
+}
+
 function interactive {
-	echo "shadowmanager (Interactive mode)"
-	echo "Copyright 2015 MagicNAT Networking"
-	echo "This is free software with ABSOLUTELY NO WARRANTY."
-	echo "Loaded override: $(ls ./override/|tr '\n' ' ')"
-	echo "Included files: $(ls ./include/|tr '\n' ' ')"
-	echo "Language: $LANGUAGE"
-	echo "type 'declare' for printing running environment."
+	sminfo
 	while true
 	do
 		echo -n "[$(pwd)] > "; read cmd;
