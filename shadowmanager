@@ -211,12 +211,11 @@ commands explained:
 function _show-extra-helps {
 	[[ -e .shadowmanager.extrahelp ]] && {
 		echo $USAGE_EXTRA; echo
-		cat .shadowmanager.extrausage
+		cat .shadowmanager.extrausage; echo
 	}
-	echo
 	[[ -e .shadowmanager.extrahelp ]] && {
 	echo $HELP_EXTRA; echo
-	cat .shadowmanager.extrahelp
+	cat .shadowmanager.extrahelp; echo
 	}
 }
 
