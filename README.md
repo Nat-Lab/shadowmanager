@@ -57,10 +57,10 @@ Hooks can also be add by the non-original implements. (i.e. overrides, includes,
 
 Hook command will check if the function is exist, and execute it if exist.
 
-To make you usages and explanations into shadowmanager, use 'add-help' and 'add-usage'. Both two of them accept inputs from stdin.
+To make you usages and explanations into shadowmanager, use 'add-help' and 'add-usage'. Both two of them accept inputs from stdin. The language of help can be specify as the parameter of this two commands. If the language is not specified, it will be use as the default language (shows if no preferred language provided).
 
-	usage: echo '	<your-command>: <your-explaination>' | add-help
-	usage: echo '	<your-command>: command-name <parameters>' | add-usage
+	usage: echo '	<your-command>: <your-explaination>' | add-help [help-language]
+	usage: echo '	<your-command>: command-name <parameters>' | add-usage [help-language]
 
 ### License
 

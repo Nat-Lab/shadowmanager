@@ -58,10 +58,10 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	
 Hook 命令会检测函数是否存在，若存在则会将其执行。
 
-若想要添加您自己的命令用法与解释至 shadowmanager，您可以使用 'add-help' 与 'add-usage'。这两个命令都会从标准输入读取输入。
+若想要添加您自己的命令用法与解释至 shadowmanager，您可以使用 'add-help' 与 'add-usage'。这两个命令都会从标准输入读取输入。帮助文本的语言可以在这两个命令的参数内定义。若留空，则会被作为默认语言显示（当偏好语言不能被提供时使用）。
 
-	usage: echo '	<your-command>: <your-explaination>' | add-help
-	usage: echo '	<your-command>: command-name <parameters>' | add-usage
+	usage: echo '	<your-command>: <your-explaination>' | add-help [help-language]
+	usage: echo '	<your-command>: command-name <parameters>' | add-usage [help-language]
 
 ### 协议
 
