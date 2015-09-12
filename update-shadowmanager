@@ -12,5 +12,11 @@ rm master.zip
 cd shadowmanager-*/
 cp ../../conf/shadowmanager.conf{,.old}
 cp -R . ../../
+cd ../../
+update_ovr="$(ls ./override/)"
+for _ovr_update in $update_ovr
+do
+	cp ./override-available/$_ovr_update ./override/
+done
 echo "Update complete. Your shadowmanager.conf was moved to shadowmanager.conf.old."
 rm -fr ../../.update
