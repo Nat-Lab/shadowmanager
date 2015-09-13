@@ -33,6 +33,19 @@ function ifroot {
 	}
 }
 
+function shadowmanager_exec {
+	if [[ ! -z $* ]]
+	then
+		if ! type "$1" > /dev/null 2> /dev/null
+		then
+			echo "shadowmanager: command not found: $1"
+			return 127
+		else
+			eval $*
+		fi
+	fi
+}
+
 # show: show handling servers
 # usage: show
 
@@ -214,4 +227,4 @@ do
 done
 
 ifroot
-[[ -z $* ]] && usage || $*
+[[ -z $* ]] && usage || shadowmanager_exec $*
