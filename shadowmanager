@@ -10,14 +10,18 @@ cd "$(dirname "$0")"
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
 
+function _shadowmanager_load {
+	[[ -z $(cat $1 | grep "shadowmanager-ignore") ]] && . ./$1
+}
+
 for inc in $(ls ./include/)
 do
-	. ./include/$inc
+	_shadowmanager_load ./include/$inc
 done
 
 for _hook in $(ls ./hooks/)
 do
-	. ./hooks/$_hook
+	_shadowmanager_load ./hooks/$_hook
 done
 
 function hook {
@@ -223,7 +227,7 @@ commands explained:
 
 for ovr in $(ls ./override/)
 do
-        . ./override/$ovr
+        _shadowmanager_load ./override/$ovr
 done
 
 ifroot
