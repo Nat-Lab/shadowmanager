@@ -18,17 +18,17 @@ function reload {
 
 	for inc in $(ls ./include/)
 	do
-		. ./include/$inc
+		_shadowmanager_load ./include/$inc
 	done
 
 	for _hook in $(ls ./hooks/)
 	do
-		. ./hooks/$_hook
+		_shadowmanager_load ./hooks/$_hook
 	done
 
 	for ovr in $(ls ./override/)
 	do
-		. ./override/$ovr
+		_shadowmanager_load ./override/$ovr
 	done
 }
 
