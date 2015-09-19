@@ -7,8 +7,11 @@ function help {
 	echo
 	echo "	sminfo: Show the basic shadowmanager informations."
 	echo "	set: set a variable with given value."
-	echo "	     usage: set <var> [value]"
+	echo "		usage: set [var] [val]"
 	echo "	reload: reload shadowmanager with current environment."
+	echo "	new: create a new instance of shadowmanager."
+	echo "		usage: new [args]"
+	echo
 }
 
 function reload {
@@ -30,6 +33,10 @@ function reload {
 	do
 		_shadowmanager_load ./override/$ovr
 	done
+}
+
+function new {
+	$0 $*
 }
 
 function set {
