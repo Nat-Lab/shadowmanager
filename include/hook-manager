@@ -1,0 +1,12 @@
+#!/bin/bash
+
+for _hook in $(ls ./hooks/)
+do
+	_shadowmanager_load ./hooks/$_hook
+done
+
+function hook {
+	declare -F $1 > /dev/null
+	[[ ! $? == 0 ]] && return 0
+	$1
+}
