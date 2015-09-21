@@ -1,6 +1,8 @@
 #!/bin/bash
 # This override provide a wizard for adding servers, removing servers etc.
 
+debug "added wizard, by wizard"
+
 function wizard {
   echo "What to do?"
   echo "[0] Exit and do nothing"
@@ -39,6 +41,8 @@ function wizard {
        ;;
   esac
 }
+
+debug "oevrrided usage, by wizard"
 
 function usage {
   wizard

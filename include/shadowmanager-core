@@ -12,6 +12,7 @@ function shadowmanager_exec {
 	then
 		if ! type "$1" > /dev/null 2> /dev/null
 		then
+			debug "call $1"
 			echo "shadowmanager: command not found: $1"
 			return 127
 		else
@@ -26,6 +27,7 @@ function shadowmanager_exec {
 function verify {
 	for char in $INVALID_CHARS
 	do
+		debug "check if exist $char"
 		if [[ $* == *$char* ]]
 		then
 			echo false; return

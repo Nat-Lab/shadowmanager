@@ -7,12 +7,14 @@ rm .shadowmanager.extrahelp.* .shadowmanager.extrausage.* 2> /dev/null
 # echo '....' | add-help [language]
 function add-help {
   [[ ! -z $1 ]] && _helplang=$1 || _helplang=general
+  debug "adding help in $_helplang"
   cat >> .shadowmanager.extrahelp.$_helplang
 }
 
 function add-usage {
   [[ ! -z $1 ]] && _helplang=$1 || _helplang=general
   cat >> .shadowmanager.extrausage.$_helplang
+  debug "adding usage in $_helplang"
 }
 
 function _show-extra-helps {

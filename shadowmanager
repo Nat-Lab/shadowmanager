@@ -10,8 +10,12 @@ cd "$(dirname "$0")"
 . ./conf/shadowmanager.conf
 . ./lang/$LANGUAGE.lng
 
+function debug {
+        [[ ! -z $DEBUG ]] && echo "[DEBUG] $*"
+}
+
 function _shadowmanager_load {
-        [[ -z $(cat $1 | grep "shadowmanager-ignore") ]] && . ./$1
+        [[ -z $(cat $1 | grep "shadowmanager-ignore") ]] && . ./$1 && debug "load: loaded $1" || debug "load: ignored $1"
 }
 
 for inc in $(ls ./include/)

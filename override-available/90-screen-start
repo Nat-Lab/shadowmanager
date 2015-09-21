@@ -1,9 +1,13 @@
 #!/bin/bash
 # This override make shadowmanager start the server use screen instead of daemon.
 
+debug "changed SHADOW_CMD, by screen-start"
+
 SHADOW_CMD=$(echo $SHADOW_CMD | sed -e 's/-d start//g;')
 ERR_IN_SCREEN_MODEenglish="You are currently in screen mode, you will have to stop/restart server(s) manualy."
 ERR_IN_SCREEN_MODEchinese="你现在在使用 screen 模式，你需要手动停止／重启服务器。"
+
+debug "overrided start, by screen-start"
 
 function start {
   genconf
@@ -16,10 +20,14 @@ function start {
   echo $DONE
 }
 
+debug "overrided stop, by screen-start"
+
 function stop {
 	eval echo \$ERR_IN_SCREEN_MODE$LANGUAGE
 	return 1
 }
+
+debug "overrided restart, by screen-start"
 
 function restart {
 	stop

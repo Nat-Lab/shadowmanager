@@ -3,6 +3,8 @@
 
 [[ ! $LANGUAGE == "chinese" ]] && return 0
 
+debug "overrided usage, by chinese-usage"
+
 function usage {
 echo '
 shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服务器的脚本。

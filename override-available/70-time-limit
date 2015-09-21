@@ -4,6 +4,8 @@
 
 INVALID_CHARS="$INVALID_CHARS |"
 
+debug "added init-timelim, by timelim"
+
 function init-timelim {
 	[[ -e .cron.tmp ]] && return 0
 	echo "Installing timelim..."
@@ -21,6 +23,8 @@ function pre-add {
 	let _due=$_time+$_dur
 	echo -n "$_due|" >> $SHADOW_CONF
 }
+
+debug "added timelim-update, by timelim"
 
 function timelim-update {
 	hook timelim-corn

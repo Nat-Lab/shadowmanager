@@ -9,8 +9,10 @@ function start {
 	hook pre-start
 	for server in $(ls)
 	do
+		debug "starting $server"
 		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
 		$(echo $SHADOW_CMD|sed -e "s/__CONFIG__/$server/") 2>> ../../$LOGDIR/$_log >> ../../$LOGDIR/$_log
+		debug "output: $(cat ../../$LOGDIR/$_log)"
 		[[ -z $(cat $SS_PID) ]] && echo $ERR_CAN_NOT_START && stop && crash 1
 		echo $(cat $SS_PID) >> $PIDS
 		rm $SS_PID
@@ -25,6 +27,7 @@ function stop {
 	echo -n "$STOPPING_SERVERS"
 	for kill in $(cat $PIDS)
 	do
+		debug "kill $kill"
 		kill $kill > /dev/null 2> /dev/null
 	done
 	rm -f $PIDS
@@ -35,4 +38,3 @@ function stop {
 function restart {
 	stop; start
 }
-

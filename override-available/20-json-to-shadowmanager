@@ -7,6 +7,8 @@ echo "	json2manager <encrypt_method> <json_file> <output_file>" | add-usage
 echo "	json2manager: 将 .json 格式的 shadowsocks 配置文件转换成 shadowmanager 的配置文件。" | add-help chinese
 echo "	json2manager <加密方式> <json 文件> <输出文件>" | add-usage chinese
 
+debug "added json2manager, by json to shadowmanager"
+
 function json2manager {
 	[[ -z $3 ]] && echo "usage: ./shadowmanager json2manager <encrypt_method> <json_file> <output_file>" && return 1
 	_method=$1
