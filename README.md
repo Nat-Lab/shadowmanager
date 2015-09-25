@@ -42,6 +42,7 @@ Official overrides list:
 	20-json-to-shadowmanager: This override provides a command 'json2manager'. It enable user to convert shadowsocks json configure files to shadowmanager configure file.
 	30-generate-qr-code: Generate QR codes for servers in the shadowmanager.
 	40-randpass: Add a command 'add-randpass' to shadowmanager which enable users to add a shadowsocks server with random password.
+	50-supervisord-warp: the supervisord warp commnd, calling it will start shadowmanager, and when receive SIGINT or SIGTERM.
 	70-time-limit: Limit the time of each shadowsocks server can use in hours. This override will hooks pre-add events so make sure you are not using some override that remove pre-add events. Cronjob will be added to check the status and remove expired accounts.
 	90-pre-server-daemon: Use separated process to serve different servers. This is useful when you needs to stat the traffic of each server separately.
 	90-screen-start: This override change the original implement of the 'start' command. By using this override, the shadowsocks servers will be start using screen instead of running background as daemon. You might want to use this if you wants shadowsocks logs.

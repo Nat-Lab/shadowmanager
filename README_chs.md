@@ -43,6 +43,7 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	20-json-to-shadowmanager：该覆写提供了一个 'json2manager' 命令，可以用于将 shadowsocks json 配置文件转换为 shadowmanager 的配置文件。
 	30-generate-qr-code：为 Shadowmanager 的服务器生成二维码。
 	40-randpass：添加一个命令 'add-randpass' 至 shadowmanager，这个命令允许用户添加随机密码的 shadowsocks 服务器。
+	50-supervisord-warp：supervisord 的映射脚本。调用此命令会启动 shadowmanager ，在接收到 SIGINT 或 SIGTERM 时，会停止 shadowmanager。
 	70-time-limit：以小时限制每个 shadowsocks 服务器可以使用的时间。这个覆写会使用 pre-add 事件钩子，并添加一个 Cronjob 来检查账户并移除过期服务器。
 	90-pre-server-daemon：为每个服务器使用单独的进程。在需要分开统计每个服务器的流量时有用。
 	90-screen-start：这个覆写将替换 'start' 命令原本的实现，使用该覆写会让 shadowsocks 服务器在 screen 内启动，而不是作为服务启动。这在需要查看服务器日志时有用。

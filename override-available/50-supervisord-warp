@@ -5,10 +5,15 @@ echo '	supervisor: the supervisord warp commnd, calling it will start shadowmana
 echo '	supervisor: supervisord 的映射脚本。调用此命令会启动 shadowmanager ，在接收到 SIGINT 或 SIGTERM 时，会停止 shadowmanager。' | add-help chinese
 
 function supervisor {
-	trap 'stop' 2 15
+	trap '_stop' 2 15
 	start
 	while true
 	do
 		read
 	done
+}
+
+function _stop {
+	stop
+	exit
 }
