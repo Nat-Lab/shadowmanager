@@ -1,7 +1,7 @@
 #!/bin/bash
 # supervisord-warp: warp supervisor 
 
-echo '	supervisor: the supervisord warp commnd, calling it will start shadowmanager, and when receive SIGINT or SIGTERM' | add-help
+echo '	supervisor: the supervisord warp commnd, calling it will start shadowmanager, and stop shadowmanager when receive SIGINT or SIGTERM. ' | add-help
 echo '	supervisor: supervisord 的映射脚本。调用此命令会启动 shadowmanager ，在接收到 SIGINT 或 SIGTERM 时，会停止 shadowmanager。' | add-help chinese
 
 function supervisor {
