@@ -2,7 +2,7 @@
 # start: start shadowservers
 function start {
 	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
-	genconf
+	[[ ! $1 == "--no-genconf" ]] && genconf
 	[[ ! -e $LOGDIR ]] && mkdir $LOGDIR
 	echo -n "$STARTING_SERVERS"
 	cd $SHADOW_JSON_DIR
@@ -36,5 +36,7 @@ function stop {
 }
 
 function restart {
-	stop; start
+	genconf; stop; start --no-genconf
 }
+
+
