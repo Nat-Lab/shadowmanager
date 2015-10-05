@@ -32,7 +32,7 @@ function _show-extra-helps {
 		cat .shadowmanager.extrahelp.$LANGUAGE; echo
 	} || {
 		[[ -e .shadowmanager.extrahelp.general ]] && {
-			echo $USAGE_EXTRA; echo
+			echo $HELP_EXTRA; echo
 			cat .shadowmanager.extrahelp.general; echo
 		}
 	}
