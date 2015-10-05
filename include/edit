@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# edit: edit a server
+# usage: edit <server_id> <pass|port|method> <new_value>
+
+function edit {
+	[[ -z $3 ]] && echo "edit: $MISSING_ARGS" && return 1
+	local sid=$1; let sid++
+	local act=$2
+	local val=$3
+	local old_server=$(show|sed -n ${sid}p)
+	[[ -z $old_server ]] && echo "edit: $ERR_EDIT_NO_SUCH_SERVER" && return 1
+	
+	local _method=$(echo $old_server|awk -F "[()]" '{print $2}')
+	local _port=$(echo $old_server|awk -F "[{},]" '{print $2}')
+	local _pass=$(echo $old_server|awk -F "[{},]" '{print $3}')
+	let sid--
+
+	case $act in
+		port) _quiet=1 remove $sid; add $val $_pass $_method > /dev/null;;
+		pass) _quiet=1 remove $sid; add $_port $val $_method > /dev/null;;
+		method) _quiet=1 remove $sid; add $_port $_pass $val > /dev/null;;
+		*) echo "edit: $ERR_EDIT_NO_SUCH_OPERATION";;
+	esac
+	
+	echo "edit: $EDIT_OPERATION_COMPLETE"
+}

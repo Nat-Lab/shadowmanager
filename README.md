@@ -16,6 +16,7 @@ ShadowManager is a lightweight, extendible script to maintaince multiple shadows
 	                     remove <id>
 	                     enovr [overrides ...]
 	                     disovr [overrides ...]
+	                     edit <server_id> <pass|port|method> <new_value>
 
 commands explained:
 
@@ -28,6 +29,7 @@ commands explained:
 	remove:  remove server with given ID. Use "show" command to show all servers, accepting 1 parameter, server ID.
 	enovr:   enable one or more overrides, accepting override names as parameters (optional).
 	disovr:  disable one or more overrides, accepting override names as parameters (optional).
+	edit:    edit a shadowsocks server, accepting 3 paramaters, server ID, operation, and new value.
 
 ### Overrides, Includes and Hooks
 
