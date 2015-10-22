@@ -3,7 +3,7 @@
 function genconf {
 	hook pre-genconf
 	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
-	[[ ! -e $SHADOW_JSON_DIR ]] && mkdir $SHADOW_JSON_DIR
+	mkdir $SHADOW_JSON_DIR
 	echo -n "$GEN_SS_CONF"
 	for method in $METHODS
 	do
