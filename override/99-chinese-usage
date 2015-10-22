@@ -3,6 +3,8 @@
 
 [[ ! $LANGUAGE == "chinese" ]] && return 0
 
+debug "overrided usage, by chinese-usage"
+
 function usage {
 echo '
 shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服务器的脚本。
@@ -16,6 +18,9 @@ shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服�
                     status
                     show
                     remove <id>
+                    enovr [overrides...]
+                    disovr [overrides...]
+                    edit <server_id> <pass|port|method> <new_value>
 
 参数解释：
 
@@ -24,9 +29,14 @@ shadowmanager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	start:   启动 shadowmanager，无需参数。
 	stop:    停止 shadowmanager，无需参数。
 	restart: 重启 shadowmamager，无需参数。
-  status:  检视 shadowmanager 状态，无需参数。
+	status:  检视 shadowmanager 状态，无需参数。
 	show:    显示所有 shadowsocks 服务器，无需参数。
 	remove:  移除指定 ID 的 shadowsocks 服务器，使用 "show" 来查看所有服务
 	         器，需要 1 个参数，服务器 ID。
+	enovr:   启用一个或多个覆写，可将覆写名作为参数（可选）。
+	disovr:  禁用一个或多个覆写，可将覆写名作为参数（可选）。
+	edit:    编辑服务器信息，接受 3 个参数，服务器ID，操作，和新值。
+
 '
+  _show-extra-helps
 }

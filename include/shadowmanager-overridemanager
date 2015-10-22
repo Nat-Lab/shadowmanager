@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function enovr {
+  [[ -z $* ]] && {
+    echo "$AVAIL_OVERRIDES"
+    ls ./override-available/|tr '\n' ' '
+    echo; read -p "$ENABLE_OVERRIDES" _ovrs;
+  } || _ovrs="$*"
+  for _ovr in $_ovrs
+  do
+    [[ -e ./override-available/$_ovr ]] && cp ./override-available/$_ovr ./override/$_ovr || echo "$OVERRIDE $_ovr $NOT_EXIST"
+  done
+}
+
+function disovr {
+  [[ -z $* ]] && {
+    echo "$ENABLED_OVERRIDES"
+    ls ./override/|tr '\n' ' '
+    echo; read -p "$REMOVE_OVERRIDES" _ovrs;
+  } || _ovrs="$*"
+  for _ovr in $_ovrs
+  do
+    [[ -e ./override/$_ovr ]] && rm ./override/$_ovr || echo "$OVERRIDE $_ovr $NOT_EXIST"
+  done
+}

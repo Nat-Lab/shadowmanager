@@ -1,0 +1,49 @@
+#!/bin/bash
+# This override provide a wizard for adding servers, removing servers etc.
+
+debug "added wizard, by wizard"
+
+function wizard {
+  echo "What to do?"
+  echo "[0] Exit and do nothing"
+  echo "[1] Add a server to shadowmanager"
+  echo "[2] Show handling servers"
+  echo "[3] Remove a server from handler"
+  echo
+  echo
+  echo "[a] Enable an override"
+  echo "[b] Disable an override"
+  echo "[c] Execute command"
+  read -p ">" what
+  case $what in
+    0) exit 0 ;;
+    1) read -p "Port: " __port
+       read -p "Password: " __pass
+       read -p "Method: " __method
+       add $__port $__pass $__method
+       ;;
+    2) show ;;
+    3) show
+       read -p "Which to remove? " __id
+       remove $__id
+       ;;
+    a) echo "Available overrides: $(ls ./override-available/|tr '\n' ' ')"
+       read -p "Enter the name of the override to enable it: " __enable
+       #ln -s ./override-available/$__enable ./override/$__enable
+       cp ./override-available/$__enable ./override/$__enable
+       ;;
+    b) echo "Loaded override: $(ls ./override/|tr '\n' ' ')"
+       read -p "Enter the name of the override to disable it: " __disable
+       rm ./override/$__disable
+       ;;
+    c) read -p "shadowmanager> " cmd
+       $0 $cmd
+       ;;
+  esac
+}
+
+debug "oevrrided usage, by wizard"
+
+function usage {
+  wizard
+}

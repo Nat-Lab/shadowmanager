@@ -2,5 +2,6 @@
 # This override disable root check in source level.
 
 function ifroot {
+	debug "root check disabled via override"
 	return 0
 }

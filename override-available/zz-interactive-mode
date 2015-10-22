@@ -2,29 +2,74 @@
 # This override take control of shadowmanager, and entering an interactive shell.
 # This override shold have the highest priority (override at last).
 
-function interactive {
-	echo "shadowmanager (Interactive mode)"
-	echo "Copyright 2015 MagicNAT Networking"
-	echo "This is free software with ABSOLUTELY NO WARRANTY."
-	while true
+debug "added help, via interactive mode"
+
+function help {
+	echo "shadowmanager debug console commands: "
+	echo
+	echo "	sminfo: Show the basic shadowmanager informations."
+	echo "	set: set a variable with given value."
+	echo "		usage: set [var] [val]"
+	echo "	reload: reload shadowmanager with current environment."
+	echo "	new: create a new instance of shadowmanager."
+	echo "		usage: new [args]"
+	echo
+}
+
+debug "added reload, via interactive mode"
+
+function reload {
+	cd "$(dirname "$0")"
+
+	. ./lang/$LANGUAGE.lng
+
+	for inc in $(ls ./include/)
 	do
-		echo -n "$(whoami)@shadowmanager> "; read cmd;
-		shadowmanager_exec $cmd
+		_shadowmanager_load ./include/$inc
+	done
+
+	for _hook in $(ls ./hooks/)
+	do
+		_shadowmanager_load ./hooks/$_hook
+	done
+
+	for ovr in $(ls ./override/)
+	do
+		_shadowmanager_load ./override/$ovr
 	done
 }
 
-function shadowmanager_exec {
-	if [[ ! -z $cmd ]]
-	then
-		exe=$(echo $cmd | awk '{print $1}')
-		if ! type "$exe" > /dev/null 2> /dev/null
-		then
-			echo "shadowmanager: command not found: $exe"
-			return 127
-		else
-			eval $cmd
-		fi
-	fi
+debug "added new, via interactive mode"
+
+function new {
+	$0 $*
+}
+
+debug "added set, via interactive mode"
+
+function set {
+	[[ -z $1 ]] && declare && return 0
+	[[ -z $2 ]] && unset $1 && return 0
+	eval $1="$2"
+}
+
+function sminfo {
+        echo "shadowmanager (Interactive mode)"
+        echo "Copyright 2015 MagicNAT Networking"
+        echo "This is free software with ABSOLUTELY NO WARRANTY."
+        echo "Loaded override: $(ls ./override/|tr '\n' ' ')"
+        echo "Included files: $(ls ./include/|tr '\n' ' ')"
+        echo "Language: $LANGUAGE"
+        echo "type 'help' for help."
+}
+
+function interactive {
+	sminfo
+	while true
+	do
+		echo -n "[$(pwd)] > "; read cmd;
+		shadowmanager_exec $cmd
+	done
 }
 
 interactive

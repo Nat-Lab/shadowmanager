@@ -1,11 +1,20 @@
 #!/bin/bash
 # This override enable users to generate QR code for their shadowsocks servers.
 # dependency: qrencode
-# usage: generate-qr <output-dir>
+# usage: generate-qr <output-dir> <hostname>
+
+echo "	generate-qr: generate QR code for shadowsocks servers." | add-help
+echo "	generate-qr <output-dir> <hostname>" | add-usage
+echo "	generate-qr: 为 shadowsocks 服务器生成二维码。" | add-help chinese
+echo "	generate-qr <输出文件夹> <域名>" | add-usage chinese
+
+debug "internal function _getqr added, by generate-qr"
 
 function _getqr {
     qrencode -l L -o $1 $2
 }
+
+debug "generate-qr added, by generate-qr"
 
 function generate-qr {
   [[ -z $2 ]] && echo "usage: generate-qr <output-dir> <hostname>" && return 1

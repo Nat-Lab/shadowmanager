@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# The Server informations API, for plugins develop
+#
+# usgae: server <verb> [query]
+#	getPortByID
+#	getMethodByID
+#	getPassByID
+#
+# usage: parser <info>
+#	pass
+#	method
+#	port
+# read from stdin
+function server {
+	case $1 in 
+		getPortByID) cat $SHADOW_CONF|sed -n ${2}p|parser port;;
+		getMethodByID) cat $SHADOW_CONF|sed -n ${2}p|parser method;;
+		getPassByID) cat $SHADOW_CONF|sed -n ${2}p|parser pass;;
+	esac
+}
+
+function parser {
+	local _orig=$(cat)
+	local _method=$(echo $_orig|awk -F "[()]" '{print $2}')
+	local _port=$(echo $_orig|awk -F "[{},]" '{print $2}')
+	local _pass=$(echo $_orig|awk -F "[{},]" '{print $3}')
+	case $1 in
+		port) echo $_port;;
+		pass) echo $_pass;;
+		method) echo $_method;;
+	esac
+}

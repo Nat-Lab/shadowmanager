@@ -1,15 +1,22 @@
 #!/bin/bash
 # This override makes each server use it own daemon.
 
+debug "overrided SHADOWSOCKS_JSON_PRE, by pre-server-daemon"
+
 SHADOWSOCKS_JSON_PRE='
 {
     "server": "0.0.0.0",
 '
+
+debug "overrided SHADOWSOCKS_JSON_EXT, by pre-server-daemon"
+
 SHADOWSOCKS_JSON_EXT='
     "timeout": 300,
     "method": "__METHOD__",
     "fast_open": __FAST_OPEN__
 }'
+
+debug "overrided genconf, by pre-server-daemon"
 
 function genconf {
   hook pre-genconf

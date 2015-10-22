@@ -1,5 +1,5 @@
 #!/bin/bash
 
-function post-genconf {
+function post-stop {
   return 0
 }

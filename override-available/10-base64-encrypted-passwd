@@ -3,10 +3,18 @@
 # This will enable user to use char such as { } , [ ] ( ) in password.
 # Use 'plaintobase64' and 'base64toplain' to convert between base64 and plain text.
 
+_debug_tag=" by base64 encrypter"
 CONVERTED_TO_BASE64english="Converted to base64."
 CONVERTED_TO_PLAINenglish="Converted to plain format. If there are illigal chars in password, shadowmanager might not work correctly."
 CONVERTED_TO_BASE64chinese="已转换到base64。"
 CONVERTED_TO_PLAINchinese="已转换到纯文本格式。如果密码中包含非法字符，shadowmanager 可能不能正常工作。"
+
+echo "	plaintobase64: convert shadowmanager configure file from plain format to base64." | add-help
+echo "	base64toplain: convert shadowmanager configure file from base64 format to plain." | add-help
+echo "	plaintobase64: 将 shadowmanager 的配置文件从纯文本转换到 base64 格式。" | add-help chinese
+echo "	base64toplain: 将 shadowmanager 的配置文件从 base64 转换到纯文本格式。" | add-help chinese
+
+debug "overrided genconf,$_debug_tag"
 
 function genconf {
 	hook pre-genconf
@@ -40,17 +48,21 @@ function genconf {
 	hook post-genconf
 }
 
+debug "overrided add,$_debug_tag"
+
 function add {
-	hook pre-add
   _pass=$(echo $2 | base64)
 	[[ -z $3 ]] && echo "add: $MISSING_ARGS" && return 1
 	[[ $(verify $1 $3) == "false" ]] && echo "$CONTAIN_INVALID_CHARS" && return 1
 	[[ -e $SHADOW_CONF && ! -z $(cat $SHADOW_CONF | grep {$1, | awk -F{ '{print $2}' | awk -F, '{print $1}') ]] && echo "$PORT_ALREADY_IN_USE" && return 1
 	[[ -z $(echo $METHODS | grep \ $3\ ) ]] && echo $(echo "$ERR_METHOD_NOT_EXIST"|sed -e "s/__METHOD__/$3/") && return 1
+	hook pre-add
 	echo "($3){$1,$_pass}" >> $SHADOW_CONF
 	echo $SERVER_ADDED
 	hook post-add
 }
+
+debug "overrided show,$_debug_tag"
 
 function show {
 	id=0
@@ -66,6 +78,8 @@ function show {
 	done
 }
 
+debug "added base64toplain,$_debug_tag"
+
 function base64toplain {
 	_servers=$SHADOW_CONF
 	[[ -e $SHADOW_CONF.tmp ]] && rm $SHADOW_CONF.tmp
@@ -79,6 +93,8 @@ function base64toplain {
 	mv $SHADOW_CONF.tmp $SHADOW_CONF
 	eval echo \$CONVERTED_TO_PLAIN$LANGUAGE
 }
+
+debug "added plaintobase64,$_debug_tag"
 
 function plaintobase64 {
 	_servers=$SHADOW_CONF
