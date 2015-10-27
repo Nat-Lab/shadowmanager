@@ -11,7 +11,7 @@ cd "$(dirname "$0")"
 . ./lang/$LANGUAGE.lng
 
 function debug {
-        [[ ! -z $DEBUG ]] && echo "[DEBUG] $*"
+        [[ ! -z $DEBUG ]] && echo "[$(echo ${FUNCNAME[*]}|tr ' ' '/')] $*"
 }
 
 function _shadowmanager_load {
