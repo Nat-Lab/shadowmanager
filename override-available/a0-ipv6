@@ -6,7 +6,7 @@ SERVER_ADDR=0.0.0.0
 debug hooked post-start by ipv6 override
 
 function post-start {
-	mv $PIDS(,.ipv4)
+	mv $PIDS{,.ipv4}
 	SERVER_ADDR="::"
 	start
 	cat $PIDS.ipv4 >> $PIDS
