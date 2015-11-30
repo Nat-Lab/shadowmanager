@@ -9,6 +9,11 @@ function post-start {
 	cd ../..
 	mv $PIDS{,.ipv4}
 	SERVER_ADDR="::"
+	SHADOWSOCKS_JSON_PRE="
+{
+    \"server\": \"$SERVER_ADDR\",
+    \"port_password\": {"
+	[[ $SERVER_ADDR == "::" ]] && return 0
 	start
 	cat $PIDS.ipv4 >> $PIDS
 	rm $PIDS.ipv4
