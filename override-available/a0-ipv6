@@ -1,0 +1,14 @@
+#!/bin/bash
+# This override will start each server in both IPv6 and IPv4.
+
+SERVER_ADDR=0.0.0.0
+
+debug hooked post-start by ipv6 override
+
+function post-start {
+	mv $PIDS(,.ipv4)
+	SERVER_ADDR="::"
+	start
+	cat $PIDS.ipv4 >> $PIDS
+	rm PIDS.ipv4
+}
