@@ -2,7 +2,7 @@
 # genconf: generate the shadowsocks config file
 function genconf {
 	hook pre-genconf
-	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
+	rm -fr $SHADOW_JSON_DIR/* 2> /dev/null
 	mkdir $SHADOW_JSON_DIR
 	echo -n "$GEN_SS_CONF"
 	for method in $METHODS
