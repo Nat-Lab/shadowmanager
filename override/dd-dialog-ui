@@ -10,18 +10,26 @@ function gui {
 	done
 }
 
+function cfm_restart {
+	dialog --yesno "Restart shadowmanager?" 0 0
+	[[ $? == 0 ]] && {
+		restart 
+		read -p "Press [ENTER] key to continue..."
+	}
+}
+
 function _gui {
 
 	local TEMP=$(mktemp)
 
-	dialog --menu "shadowmanager-gui" 0 40 0 \
+	dialog --menu "shadowmanager-gui" 0 50 0 \
 		a "(A)dd a server" \
 		c "server (C)ontrol" \
 		o "(O)verride manager" \
 		r "(R)emove a server" \
 		s "(S)how servers" \
+		e "(E)xecute shadowmanager command" \
 		q "(Q)uit shadowmanager" 2> $TEMP
-
 	[[ ! $? == 0 ]] && echo q > $TEMP
 
 	case $(cat $TEMP) in
@@ -47,7 +55,9 @@ function _gui {
 			method=$(cat $_serveradd_TEMP | sed -n "${method_id}p")
 
 			debug "called add $port $pass $method"
-			dialog --msgbox $(add $port $pass $method) 0 0
+			dialog --msgbox "$(add $port $pass $method)" 0 0
+
+			cfm_restart
 
 			rm $_serveradd_TEMP*
 			return 0
@@ -68,18 +78,18 @@ function _gui {
 			case $(cat $_serverctrl_TEMP) in
 				s) {
 					stop
-					read -p "Press any key to continue."
+					read -p "Press [ENTER] key to continue..."
 				};;
 				t) {
 					start
-					read -p "Press any key to continue."
+					read -p "Press [ENTER] key to continue..."
 				};;
 				r) {
 					restart
-					read -p "Press any key to continue."
+					read -p "Press [ENTER] key to continue..."
 				};;
 				u) {
-					dialog --msgbox $(status) 0 0
+					dialog --msgbox "$(status)" 0 0
 				};;
 				b) true ;;
 			esac
@@ -131,22 +141,26 @@ function _gui {
 
 			for ovr in $(ls ./override$_end/)
 			do
-				local ovrarg="$ovrarg $i $ovr"
+				local ovrarg="$ovrarg $i $ovr 0"
 				let i++
 			done
 			
 			dialog \
-					--menu "Select a plugin to $actname:" 0 0 0 $ovrarg \
+					--checklist "Select override(s) to $actname:" 0 0 0 $ovrarg \
 			2> $_ovr_TEMP.selection
 
-			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection)p")
+			[[ -z $(cat $_ovr_TEMP.selection) ]] && rm $_ovr_TEMP && return 0
 
-			case $action in 
-				e) cp ./override-available/$ovr_target ./override/;;
-				d) rm ./override/$ovr_target;;
-			esac
+			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
 
-			dialog --msgbox "${actname}d $ovr_target override." 0 0
+			echo $ovr_target; read
+
+			for ovr in $ovr_target 
+			do
+				$([[ $action == d ]] && echo disovr || echo enovr) ./override-available/$ovr ./override/
+			done
+
+			dialog --msgbox "${actname}d $ovr_target override(s)." 0 0
 
 			rm $_ovr_TEMP*
 			return 0
@@ -155,9 +169,15 @@ function _gui {
 		s) {
 			dialog --msgbox "$(show)" 0 0
 		};;
+		e) {
+			local _cmd_temp=$(mktemp)
+			dialog --inputbox "Command:" 0 0 2> $_cmd_temp
+			eval $(cat $_cmd_temp)
+			read -p "Press [ENTER] key to continue..."
+		};;
 		q) {
 			rm $TEMP
 			exit 0
-		} ;;
+		};;
 	esac
 }
