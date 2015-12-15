@@ -103,7 +103,7 @@ function _gui {
 			show | sed -e "1d" > $_serveredit_TEMP.list
 
 			dialog \
-					--menu "Select server: " 0 40 0 $(cat $_serveredit_TEMP.list) \
+					--menu "Select server: " 0 70 0 $(cat $_serveredit_TEMP.list) \
 			2> $_serveredit_TEMP
 
 			[[ ! $? == 0 ]] && rm $_serveredit_TEMP* && return 1
@@ -152,8 +152,6 @@ function _gui {
 			[[ -z $(cat $_ovr_TEMP.selection) ]] && rm $_ovr_TEMP && return 0
 
 			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
-
-			echo $ovr_target; read
 
 			for ovr in $ovr_target 
 			do

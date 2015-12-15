@@ -153,8 +153,6 @@ function _gui {
 
 			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
 
-			echo $ovr_target; read
-
 			for ovr in $ovr_target 
 			do
 				$([[ $action == d ]] && echo disovr || echo enovr) ./override-available/$ovr ./override/
