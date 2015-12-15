@@ -50,6 +50,7 @@ Official overrides list:
 	90-screen-start: This override change the original implement of the 'start' command. By using this override, the shadowsocks servers will be start using screen instead of running background as daemon. You might want to use this if you wants shadowsocks logs.
 	99-chinese-usage: This is an override that change the 'usage' command when the language is Chinese.
 	aa-wizard: Add a wizard to shadowmanager for adding servers, removing servers etc.
+	dd-dialog-ui: Simple GUI written in dialog. Need dialog to run.
 	zz-interactive-mode: This makes shadowmanager run as an interactive shell. This is not recommend because it is not likely to work properly. However, this might be useful sometime.
 
 And hooks are the function to be execute before or after certain actions. Those hooks can be define in hooks/. Some overrides might change the hooks as needed to archive some targets.

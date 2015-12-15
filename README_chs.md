@@ -51,6 +51,7 @@ ShadowManager 是一个用于同时维护多个不同加密的 shadowsocks 服�
 	90-screen-start：这个覆写将替换 'start' 命令原本的实现，使用该覆写会让 shadowsocks 服务器在 screen 内启动，而不是作为服务启动。这在需要查看服务器日志时有用。
 	99-chinese-usage：这个覆写提供了中文的帮助文本。
 	aa-wizard：为 shadowmanager 的服务器添加、服务器移除等操作提供一个向导。
+	dd-dialog-ui：简易的 shadowmanager GUI。需要dialog来运行。
 	zz-interactive-mode：这个覆写会使得 shadowmanager 以交互式模式启动。该方法可能会引起一些问题，故不推荐。
 
 钩子是在特定行为执行前后运行的函数。这些钩子可以在 hooks/ 中定义。某些覆写可能会按需修改钩子来达成某些目的。
