@@ -114,51 +114,29 @@ function _gui {
 		o) {
 			local _ovr_TEMP="$(mktemp)"
 			
-			dialog \
-					--menu "Operation:" 0 40 0 \
-						e "(E)nable a override" \
-						d "(D)isable a override" \
-						b "(B)ack" \
-			2> $_ovr_TEMP
-
-			[[ ! $? == 0 ]] && echo b > $_ovr_TEMP
-
-			local action=$(cat $_ovr_TEMP)
-
-			case $action in
-				e) {
-					local actname="enable"
-					local _end="-available"
-				};;
-				d) {
-					local actname="disable"
-					local _end=""
-				};;
-				b) rm $_ovr_TEMP; return 0;;
-			esac
-
 			let i=1
 
-			for ovr in $(ls ./override$_end/)
+			for ovr in $(ls ./override-available/)
 			do
-				local ovrarg="$ovrarg $i $ovr 0"
+				local onoff=off
+				[[ -e ./override/$ovr ]] && local onoff=on
+				local ovrarg="$ovrarg $i $ovr $onoff"
 				let i++
 			done
 			
 			dialog \
-					--checklist "Select override(s) to $actname:" 0 0 0 $ovrarg \
+					--checklist "Select override(s) to use:" 0 0 0 $ovrarg \
 			2> $_ovr_TEMP.selection
 
 			[[ -z $(cat $_ovr_TEMP.selection) ]] && rm $_ovr_TEMP && return 0
 
-			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
+			local ovr_target=$(ls ./override-available/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
 
-			for ovr in $ovr_target 
-			do
-				$([[ $action == d ]] && echo disovr || echo enovr) $ovr
-			done
+			rm ./override/*
 
-			dialog --msgbox "${actname}d $ovr_target override(s)." 0 0
+			enovr $ovr_target
+
+			dialog --msgbox "Enabled override(s):\n $ovr_target" 0 0
 
 			rm $_ovr_TEMP*
 			return 0
