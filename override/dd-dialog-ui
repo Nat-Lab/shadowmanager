@@ -1,0 +1,163 @@
+#!/bin/bash
+
+echo "	gui: open shadowmanager GUI" | add-help
+echo "  gui: 开启 shadowmanager GUI" | add-help chinese
+
+function gui {
+	while true
+	do
+		_gui
+	done
+}
+
+function _gui {
+
+	local TEMP=$(mktemp)
+
+	dialog --menu "shadowmanager-gui" 0 40 0 \
+		a "(A)dd a server" \
+		c "server (C)ontrol" \
+		o "(O)verride manager" \
+		r "(R)emove a server" \
+		s "(S)how servers" \
+		q "(Q)uit shadowmanager" 2> $TEMP
+
+	[[ ! $? == 0 ]] && echo q > $TEMP
+
+	case $(cat $TEMP) in
+		a) {
+			local _serveradd_TEMP=$(mktemp)
+			let i=1;
+			for _method in $METHODS
+			do
+				echo $_method >> $_serveradd_TEMP
+				local _enc="$_enc $i $_method"
+				let i++
+			done
+
+			dialog \
+					--keep-window --begin 2 2 --inputbox "Port to listen on: " 0 0 \
+			--and-widget	--keep-window --begin 4 4 --inputbox "Password: " 0 0 \
+			--and-widget    --keep-window --begin 6 6 --menu "Encryption:" 0 40 0 $_enc \
+			2> $_serveradd_TEMP.selection
+
+			port=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $1}')
+			pass=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $2}')
+			method_id=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $3}')
+			method=$(cat $_serveradd_TEMP | sed -n "${method_id}p")
+
+			debug "called add $port $pass $method"
+			dialog --msgbox $(add $port $pass $method) 0 0
+
+			rm $_serveradd_TEMP*
+			return 0
+		};;
+		c) {
+			local _serverctrl_TEMP=$(mktemp)
+
+			dialog \
+					--menu "Shadowmanager control:" 0 40 0 \
+						s "(S)top shadowmanager" \
+						t "s(T)art shadowmanager" \
+						r "(R)estart shadowmanager" \
+						u "Shadowmanager (S)tatus" \
+						b "(B)ack" \
+			2> $_serverctrl_TEMP
+			[[ ! $? == 0 ]] && b > $_serverctrl_TEMP
+
+			case $(cat $_serverctrl_TEMP) in
+				s) {
+					stop
+					read -p "Press any key to continue."
+				};;
+				t) {
+					start
+					read -p "Press any key to continue."
+				};;
+				r) {
+					restart
+					read -p "Press any key to continue."
+				};;
+				u) {
+					dialog --msgbox $(status) 0 0
+				};;
+				b) true ;;
+			esac
+			
+			rm $_serverctrl_TEMP
+			return 0
+		};;
+		r) {
+			local _serveredit_TEMP="$(mktemp)"
+
+			show | sed -e "1d" > $_serveredit_TEMP.list
+
+			dialog \
+					--menu "Select server: " 0 40 0 $(cat $_serveredit_TEMP.list) \
+			2> $_serveredit_TEMP
+
+			[[ ! $? == 0 ]] && rm $_serveredit_TEMP* && return 1
+			
+			remove $(cat $_serveredit_TEMP)
+			rm $_serveredit_TEMP*
+		};;
+		o) {
+			local _ovr_TEMP="$(mktemp)"
+			
+			dialog \
+					--menu "Operation:" 0 40 0 \
+						e "(E)nable a override" \
+						d "(D)isable a override" \
+						b "(B)ack" \
+			2> $_ovr_TEMP
+
+			[[ ! $? == 0 ]] && echo b > $_ovr_TEMP
+
+			local action=$(cat $_ovr_TEMP)
+
+			case $action in
+				e) {
+					local actname="enable"
+					local _end="-available"
+				};;
+				d) {
+					local actname="disable"
+					local _end=""
+				};;
+				b) rm $_ovr_TEMP; return 0;;
+			esac
+
+			let i=1
+
+			for ovr in $(ls ./override$_end/)
+			do
+				local ovrarg="$ovrarg $i $ovr"
+				let i++
+			done
+			
+			dialog \
+					--menu "Select a plugin to $actname:" 0 0 0 $ovrarg \
+			2> $_ovr_TEMP.selection
+
+			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection)p")
+
+			case $action in 
+				e) cp ./override-available/$ovr_target ./override/;;
+				d) rm ./override/$ovr_target;;
+			esac
+
+			dialog --msgbox "${actname}d $ovr_target override." 0 0
+
+			rm $_ovr_TEMP*
+			return 0
+
+		};;
+		s) {
+			dialog --msgbox "$(show)" 0 0
+		};;
+		q) {
+			rm $TEMP
+			exit 0
+		} ;;
+	esac
+}
