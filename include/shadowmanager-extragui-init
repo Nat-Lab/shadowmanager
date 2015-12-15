@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# usage: add-ui <name> <func> 
+
+[[ -e ./$PLUGIN_UI_CFG ]] && rm ./$PLUGIN_UI_CFG
+
+function add-ui {
+	echo "adding ui to $PLUGIN_UI_CFG"
+	echo $1:$2 >> $PLUGIN_UI_CFG
+}

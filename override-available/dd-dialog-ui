@@ -29,6 +29,7 @@ function _gui {
 		r "(R)emove a server" \
 		s "(S)how servers" \
 		e "(E)xecute shadowmanager command" \
+		p "(P)lugins menu" \
 		q "(Q)uit shadowmanager" 2> $TEMP
 	[[ ! $? == 0 ]] && echo q > $TEMP
 
@@ -36,6 +37,7 @@ function _gui {
 		a) {
 			local _serveradd_TEMP=$(mktemp)
 			let i=1;
+			local _enc=""
 			for _method in $METHODS
 			do
 				echo $_method >> $_serveradd_TEMP
@@ -118,6 +120,8 @@ function _gui {
 			
 			let i=1
 
+			local ovrarg=""
+
 			for ovr in $(ls ./override-available/)
 			do
 				local onoff=off
@@ -146,6 +150,23 @@ function _gui {
 		};;
 		s) {
 			dialog --msgbox "$(show)" 0 0
+		};;
+		p) {
+			local _pluginui_temp=$(mktemp)
+			local pluginarg=""
+			IFS=$'\n'
+			for plugin in $(cat $PLUGIN_UI_CFG)
+			do
+				thisname=$(echo $plugin | awk -F":" '{print $1}')
+				thisfunc=$(echo $plugin | awk -F":" '{print $2}')
+				pluginarg="$pluginarg $thisfunc $thisname "
+			done
+			
+			[[ -z $pluginarg ]] && dialog --msgbox "No extra GUIs found." 5 30 
+
+			IFS=" "
+
+			dialog --menu "GUI Provided by overrides:" 0 75 0 $pluginarg
 		};;
 		e) {
 			local _cmd_temp=$(mktemp)

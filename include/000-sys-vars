@@ -14,3 +14,4 @@ SHADOWSOCKS_JSON_EXT="
     \"fast_open\": __FAST_OPEN__
 }"
 INVALID_CHARS="[ ] { } \  , ( ) __METHOD__ __FAST_OPEN__"
+PLUGIN_UI_CFG=".plugin_ui.cfg"
