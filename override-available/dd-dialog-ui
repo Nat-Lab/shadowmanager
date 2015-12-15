@@ -49,6 +49,8 @@ function _gui {
 			--and-widget    --keep-window --begin 6 6 --menu "Encryption:" 0 40 0 $_enc \
 			2> $_serveradd_TEMP.selection
 
+			[[ ! $? == 0 ]] && rm $_serveradd_TEMP* && return 1
+
 			port=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $1}')
 			pass=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $2}')
 			method_id=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $3}')
