@@ -155,7 +155,7 @@ function _gui {
 
 			for ovr in $ovr_target 
 			do
-				$([[ $action == d ]] && echo disovr || echo enovr) ./override-available/$ovr ./override/
+				$([[ $action == d ]] && echo disovr || echo enovr) $ovr
 			done
 
 			dialog --msgbox "${actname}d $ovr_target override(s)." 0 0
