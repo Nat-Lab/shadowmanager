@@ -11,6 +11,39 @@ echo "	add-randpass <端口> <加密方法> [密码长度]" | add-usage chinese
 
 debug "added internal function _getrandpass, by randpass"
 
+add-ui Add_a_server_with_random_password ui_randpasswd
+
+function ui_randpasswd {
+	local _radd_TEMP=$(mktemp)
+	let i=1;
+	local _enc=""
+	for _method in $METHODS
+	do
+		echo $_method >> $_radd_TEMP
+		local _enc="$_enc $i $_method"
+		let i++
+	done
+
+	dialog \
+			--keep-window --begin 2 2 --inputbox "Port to listen on: " 0 0 \
+	--and-widget	--keep-window --begin 4 4 --inputbox "Password Length: " 0 0 $DEFAULT_PASSWD_LEN \
+	--and-widget    --keep-window --begin 6 6 --menu "Encryption:" 0 40 0 $_enc \
+	2> $_radd_TEMP.selection
+	[[ ! $? == 0 ]] && rm $_radd_TEMP* && return 1
+	
+	port=$(cat $_radd_TEMP.selection | awk -F'\t' '{print $1}')
+	passlen=$(cat $_radd_TEMP.selection | awk -F'\t' '{print $2}')
+	method_id=$(cat $_radd_TEMP.selection | awk -F'\t' '{print $3}')
+	method=$(cat $_radd_TEMP | sed -n "${method_id}p")
+
+	dialog --msgbox "$(add-randpass $port $method $passlen)" 0 0
+
+	cfm_restart
+
+	rm $_radd_TEMP*
+	return 0
+}
+
 function _getrandpass {
 	# We are using LC_CTYPE=C here to makes OSX etc works porperly.
 	[[ -z $1 ]] && LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $DEFAULT_PASSWD_LEN || LC_CTYPE=C tr -dc 'A-Za-z0-9_' < /dev/urandom | head -c $1

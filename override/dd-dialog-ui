@@ -29,6 +29,7 @@ function _gui {
 		r "(R)emove a server" \
 		s "(S)how servers" \
 		e "(E)xecute shadowmanager command" \
+		p "(P)lugins menu" \
 		q "(Q)uit shadowmanager" 2> $TEMP
 	[[ ! $? == 0 ]] && echo q > $TEMP
 
@@ -36,6 +37,7 @@ function _gui {
 		a) {
 			local _serveradd_TEMP=$(mktemp)
 			let i=1;
+			local _enc=""
 			for _method in $METHODS
 			do
 				echo $_method >> $_serveradd_TEMP
@@ -48,6 +50,8 @@ function _gui {
 			--and-widget	--keep-window --begin 4 4 --inputbox "Password: " 0 0 \
 			--and-widget    --keep-window --begin 6 6 --menu "Encryption:" 0 40 0 $_enc \
 			2> $_serveradd_TEMP.selection
+
+			[[ ! $? == 0 ]] && rm $_serveradd_TEMP* && return 1
 
 			port=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $1}')
 			pass=$(cat $_serveradd_TEMP.selection | awk -F'\t' '{print $2}')
@@ -114,51 +118,31 @@ function _gui {
 		o) {
 			local _ovr_TEMP="$(mktemp)"
 			
-			dialog \
-					--menu "Operation:" 0 40 0 \
-						e "(E)nable a override" \
-						d "(D)isable a override" \
-						b "(B)ack" \
-			2> $_ovr_TEMP
-
-			[[ ! $? == 0 ]] && echo b > $_ovr_TEMP
-
-			local action=$(cat $_ovr_TEMP)
-
-			case $action in
-				e) {
-					local actname="enable"
-					local _end="-available"
-				};;
-				d) {
-					local actname="disable"
-					local _end=""
-				};;
-				b) rm $_ovr_TEMP; return 0;;
-			esac
-
 			let i=1
 
-			for ovr in $(ls ./override$_end/)
+			local ovrarg=""
+
+			for ovr in $(ls ./override-available/)
 			do
-				local ovrarg="$ovrarg $i $ovr 0"
+				local onoff=off
+				[[ -e ./override/$ovr ]] && local onoff=on
+				local ovrarg="$ovrarg $i $ovr $onoff"
 				let i++
 			done
-			
+
 			dialog \
-					--checklist "Select override(s) to $actname:" 0 0 0 $ovrarg \
+					--checklist "Select override(s) to use:" 0 0 0 $ovrarg \
 			2> $_ovr_TEMP.selection
 
 			[[ -z $(cat $_ovr_TEMP.selection) ]] && rm $_ovr_TEMP && return 0
 
-			local ovr_target=$(ls ./override$_end/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
+			local ovr_target=$(ls ./override-available/|sed -n "$(cat $_ovr_TEMP.selection|sed -e 's/ /p; /g')p;")
 
-			for ovr in $ovr_target 
-			do
-				$([[ $action == d ]] && echo disovr || echo enovr) $ovr
-			done
+			rm ./override/*
 
-			dialog --msgbox "${actname}d $ovr_target override(s)." 0 0
+			enovr $ovr_target
+
+			dialog --msgbox "Enabled override(s):\n$ovr_target\n\nYou will need to restart shadowmanager." 0 0
 
 			rm $_ovr_TEMP*
 			return 0
@@ -166,6 +150,24 @@ function _gui {
 		};;
 		s) {
 			dialog --msgbox "$(show)" 0 0
+		};;
+		p) {
+			local _pluginui_temp=$(mktemp)
+			local pluginarg=""
+			IFS=$'\n'
+			for plugin in $(cat $PLUGIN_UI_CFG)
+			do
+				thisname=$(echo $plugin | awk -F":" '{print $1}')
+				thisfunc=$(echo $plugin | awk -F":" '{print $2}')
+				pluginarg="$pluginarg $thisfunc $thisname "
+			done
+			
+			[[ -z $pluginarg ]] && dialog --msgbox "No extra GUIs found." 5 30 
+
+			IFS=" "
+
+			dialog --menu "GUI Provided by overrides:" 0 75 0 $pluginarg 2> $_pluginui_temp
+			$(cat $_pluginui_temp)
 		};;
 		e) {
 			local _cmd_temp=$(mktemp)

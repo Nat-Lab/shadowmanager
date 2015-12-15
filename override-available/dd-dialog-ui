@@ -129,7 +129,7 @@ function _gui {
 				local ovrarg="$ovrarg $i $ovr $onoff"
 				let i++
 			done
-			
+
 			dialog \
 					--checklist "Select override(s) to use:" 0 0 0 $ovrarg \
 			2> $_ovr_TEMP.selection
@@ -142,7 +142,7 @@ function _gui {
 
 			enovr $ovr_target
 
-			dialog --msgbox "Enabled override(s):\n $ovr_target" 0 0
+			dialog --msgbox "Enabled override(s):\n$ovr_target\n\nYou will need to restart shadowmanager." 0 0
 
 			rm $_ovr_TEMP*
 			return 0
@@ -166,7 +166,8 @@ function _gui {
 
 			IFS=" "
 
-			dialog --menu "GUI Provided by overrides:" 0 75 0 $pluginarg
+			dialog --menu "GUI Provided by overrides:" 0 75 0 $pluginarg 2> $_pluginui_temp
+			$(cat $_pluginui_temp)
 		};;
 		e) {
 			local _cmd_temp=$(mktemp)
