@@ -34,7 +34,7 @@ function ui_json2man {
 	local json=$(cat $_j2m_TEMP.selection | awk -F'\t' '{print $2}')
 	local output=$(cat $_j2m_TEMP.selection | awk -F'\t' '{print $3}')
 
-	son2manager $method $json $output
+	json2manager $method $json $output
 
 	dialog --msgbox "Done."
 
