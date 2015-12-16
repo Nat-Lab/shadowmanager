@@ -8,6 +8,37 @@ echo "	json2manager: 将 .json 格式的 shadowsocks 配置文件转换成 shado
 echo "	json2manager <加密方式> <json 文件> <输出文件>" | add-usage chinese
 
 debug "added json2manager, by json to shadowmanager"
+add-ui Convert_json_shadowsocks_cfg_file_to_shadowmanager_cfg_file ui_json2man
+
+function ui_json2man {
+	local _j2m_TEMP=$(mktemp)
+	let i=1;
+	local _enc=""
+	for _method in $METHODS
+	do
+		echo $_method >> $_j2m_TEMP
+		local _enc="$_enc $i $_method"
+		let i++
+	done
+
+	dialog \
+			--keep-window --begin 2 2 --menu "Encryption:" 0 40 0 $_enc \
+	--and-widget	--keep-window --begin 4 4 --inputbox "Path to json file: " 0 0 \
+	--and-widget    --keep-window --begin 6 6 --inputbox "Output dir:" 0 0 \
+	2> $_j2m_TEMP.selection
+
+	[[ ! $? == 0 ]] && rm $_j2m_TEMP* && return 1
+
+	local method_id=$(cat $_j2m_TEMP.selection | awk -F'\t' '{print $1}')
+	local method=$(cat $_j2m_TEMP | sed -n "${method_id}p")
+	local json=$(cat $_j2m_TEMP.selection | awk -F'\t' '{print $2}')
+	local output=$(cat $_j2m_TEMP.selection | awk -F'\t' '{print $3}')
+
+	dialog --msgbox "$(json2manager #method $json $output)"
+
+	rm $_j2m_TEMP*
+	return 0
+}
 
 function json2manager {
 	[[ -z $3 ]] && echo "usage: ./shadowmanager json2manager <encrypt_method> <json_file> <output_file>" && return 1

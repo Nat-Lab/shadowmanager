@@ -16,6 +16,29 @@ echo "	base64toplain: 将 shadowmanager 的配置文件从 base64 转换到纯�
 
 debug "overrided genconf,$_debug_tag"
 
+add-ui Encode_or_decode_shadowmanager_passwd ui_b64
+
+function ui_b64 {
+	local _b64_TEMP=$(mktemp)
+
+	dialog --menu "Operation:" 0 40 0 \
+		p "(P)lain to base64" \
+		b "(B)ase64 to plain" \
+		q "(Q)uit" \
+	2> $_b64_TEMP
+
+	[[ ! $? == 0 ]] && echo q > $_b64_TEMP
+
+	case $(cat $_b64_TEMP) in 
+		p) dialog --msgbox "$(plaintobase64)" 0 0;;
+		b) dialog --msgbox "$(base64toplain)" 0 0;;
+		q) rm $_b64_TEMP && return 0
+	esac
+
+	rm $_b64_TEMP
+	return 0
+}
+
 function genconf {
 	hook pre-genconf
 	rm -f $SHADOW_JSON_DIR/* 2> /dev/null
