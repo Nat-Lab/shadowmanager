@@ -1,0 +1,25 @@
+#!/bin/bash
+# shadowsocks-libev support
+# make sure you also enabled 90-pre-server-deamon to get this work.
+
+USER='nobody'
+
+function start {
+	[[ -e $PIDS ]] && echo start: $ERR_RUNNING && return 1
+	[[ ! $1 == "--no-genconf" ]] && genconf
+	[[ ! -e $LOGDIR ]] && mkdir $LOGDIR
+	echo -n "$STARTING_SERVERS"
+	cd $SHADOW_JSON_DIR
+	hook pre-start
+	for server in $(ls)
+	do
+		debug "starting $server"
+		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
+		ss-server -c "$server" -a $USER -u -f pid
+		[[ -z $(cat pid) ]] && echo $ERR_CAN_NOT_START && stop && crash 1
+		echo pid >> $PIDS
+		rm $SS_PID
+	done
+	echo $DONE
+	hook post-start
+}
