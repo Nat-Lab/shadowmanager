@@ -17,8 +17,8 @@ function start {
 		_log=$server-$(date +%Y-%m-%d_%H:%M:%S)
 		ss-server -c "$server" -a $USER -u -f pid
 		[[ -z $(cat pid) ]] && echo $ERR_CAN_NOT_START && stop && crash 1
-		echo pid >> $PIDS
-		rm $SS_PID
+		echo "$(cat pid)" >> $PIDS
+		rm pid
 	done
 	echo $DONE
 	hook post-start
