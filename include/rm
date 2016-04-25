@@ -5,8 +5,8 @@
 function remove {
 	[[ -z $1 ]] && echo "remove: $MISSING_ARGS" && return 1
 	sed -e "${1}d" $SHADOW_CONF > $SHADOW_CONF.tmp
-	[[ -z $_quiet ]] && show -i
-	[[ -z $_quiet ]] && read -p "$SAVE_SERVER" yn || yn=y
+	((_quiet)) && show -i
+	((! _quiet)) && read -p "$SAVE_SERVER" yn || yn=y
 	case $yn in
 		y|Y|yes|Yes)
 			mv $SHADOW_CONF.tmp $SHADOW_CONF
