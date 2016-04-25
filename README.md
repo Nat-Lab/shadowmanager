@@ -1,6 +1,8 @@
 ShadowManager - A shadowsocks manager
 ---
 
+[![Build Status](https://travis-ci.org/MagicNAT/shadowmanager.svg?branch=master)](https://travis-ci.org/MagicNAT/shadowmanager)
+
 Copyright MagicNAT 2015
 
 ### Usage
