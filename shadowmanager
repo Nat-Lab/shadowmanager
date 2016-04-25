@@ -8,7 +8,7 @@
 cd "$(dirname "$0")"
 
 . ./conf/shadowmanager.conf
-. ./lang/$LANGUAGE.lng
+. ./lang/$LANGUAGE.lang
 
 function debug {
         [[ ! -z $DEBUG ]] && echo "[$(echo ${FUNCNAME[*]}|tr ' ' '/')] $*"

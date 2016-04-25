@@ -1,7 +1,7 @@
 #!/bin/bash
 # This override enable shadowmanager to show usage in Chinese
 
-[[ ! $LANGUAGE == "chinese" ]] && return 0
+[[ ! $LANGUAGE == "zh_CN" ]] && return 0
 
 debug "overrided usage, by chinese-usage"
 
