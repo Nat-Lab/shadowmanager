@@ -10,7 +10,7 @@ addons:
     - shellcheck
 
 script:
- - bash -c 'shopt -s globstar; shellcheck $(egrep -lir '#!/bin/bash' .)'
+ - bash -c 'shopt -s globstar; shellcheck $(egrep -lir "#\!/bin/bash" .)' 
 
 matrix:
   fast_finish: true
