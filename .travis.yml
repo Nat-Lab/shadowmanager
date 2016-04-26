@@ -10,7 +10,7 @@ addons:
     - shellcheck
 
 script:
- - bash -c 'shopt -s globstar; shellcheck $(egrep -lir "#\!/bin/bash" .)' 
+ - bash -c 'shellcheck -e SC1090,SC1091,SC2015,SC2034,SC2154 $(egrep -lir "#\!/bin/bash" . | grep -v override)'
 
 matrix:
   fast_finish: true
