@@ -1,4 +1,6 @@
+#!/bin/bash
+
 function status {
-	[[ -e $PIDS ]] && echo $SHADOWMANAGER_RUNNING || echo $SHADOWMANAGER_NOT_RUNNING
+	[[ -e "$PIDS" ]] && echo "$SHADOWMANAGER_RUNNING" || echo "$SHADOWMANAGER_NOT_RUNNING"
 }
 

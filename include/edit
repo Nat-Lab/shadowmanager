@@ -8,18 +8,22 @@ function edit {
 	local sid=$(( $1 + 1 ))
 	local act=$2
 	local val=$3
-	local old_server=$(show|sed -n ${sid}p)
+	local old_server
+	old_server=$(show|sed -n ${sid}p)
 	[[ -z $old_server ]] && echo "edit: $ERR_EDIT_NO_SUCH_SERVER" && return 1
 	
-	local _method=$(echo "$old_server"|awk -F "[()]" '{print $2}')
-	local _port=$(echo "$old_server"|awk -F "[{},]" '{print $2}')
-	local _pass=$(echo "$old_server"|awk -F "[{},]" '{print $3}')
+	local _method
+	_method=$(echo "$old_server"|awk -F "[()]" '{print $2}')
+	local _port
+	_port=$(echo "$old_server"|awk -F "[{},]" '{print $2}')
+	local _pass
+	_pass=$(echo "$old_server"|awk -F "[{},]" '{print $3}')
 	let sid--
 
 	case $act in
-		port) _quiet=1 remove $sid; add $val $_pass $_method > /dev/null;;
-		pass) _quiet=1 remove $sid; add $_port $val $_method > /dev/null;;
-		method) _quiet=1 remove $sid; add $_port $_pass $val > /dev/null;;
+		port) _quiet=1 remove "$sid"; add "$val" "$_pass" "$_method" > /dev/null;;
+		pass) _quiet=1 remove "$sid"; add "$_port" "$val" "$_method" > /dev/null;;
+		method) _quiet=1 remove "$sid"; add "$_port" "$_pass" "$val" > /dev/null;;
 		*) echo "edit: $ERR_EDIT_NO_SUCH_OPERATION";;
 	esac
 	

@@ -2,35 +2,35 @@
 # genconf: generate the shadowsocks config file
 function genconf {
 	hook pre-genconf
-	rm -fr $SHADOW_JSON_DIR/* 2> /dev/null
-	mkdir $SHADOW_JSON_DIR
+	rm -fr "${SHADOW_JSON_DIR:?}"/* 2> /dev/null
+	mkdir "$SHADOW_JSON_DIR"
 	echo -n "$GEN_SS_CONF"
 	for method in $METHODS
 	do
 		{
 			debug "generating $method method"
-			[[ ! -z $(cat $SHADOW_CONF|grep \($method\)) ]] && {
-				servers=$(cat $SHADOW_CONF|grep \($method\)|sed '$ d')
-				_last=$(cat $SHADOW_CONF|grep \($method\)|tail -n1)
-				echo $SHADOWSOCKS_JSON_PRE > $SHADOW_JSON_DIR$method.conf.tmp
+			(grep -q "($method)" < "$SHADOW_CONF") && {
+				servers=$(grep "($method)" < "$SHADOW_CONF" |sed '$ d')
+				_last=$(grep "($method)" < "$SHADOW_CONF"|tail -n1)
+				echo "$SHADOWSOCKS_JSON_PRE" > "$SHADOW_JSON_DIR$method.conf.tmp"
 				for server in $servers
 				do
 					debug "gererating $server"
-					_port=$(echo $server|awk -F "[{},]" '{print $2}')
-					_pass=$(echo $server|awk -F "[{},]" '{print $3}')
-					echo "\"$_port\": \"$_pass\"," >> $SHADOW_JSON_DIR$method.conf.tmp
+					_port="$(echo "$server"|awk -F "[{},]" '{print $2}')"
+					_pass="$(echo "$server"|awk -F "[{},]" '{print $3}')"
+					echo "\"$_port\": \"$_pass\"," >> "$SHADOW_JSON_DIR$method.conf.tmp"
 				done
 				debug "gererating $_last"
-				_port=$(echo $_last|awk -F "[{},]" '{print $2}')
-				_pass=$(echo $_last|awk -F "[{},]" '{print $3}')
-				echo "\"$_port\": \"$_pass\"" >> $SHADOW_JSON_DIR$method.conf.tmp
-				echo $SHADOWSOCKS_JSON_EXT >> $SHADOW_JSON_DIR$method.conf.tmp
-				cat $SHADOW_JSON_DIR$method.conf.tmp|sed -e "s/__FAST_OPEN__/$TCP_FAST_OPEN/; s/__METHOD__/$method/;" > $SHADOW_JSON_DIR$method.conf
-				rm $SHADOW_JSON_DIR$method.conf.tmp
+				_port="$(echo "$_last"|awk -F "[{},]" '{print $2}')"
+				_pass="$(echo "$_last"|awk -F "[{},]" '{print $3}')"
+				echo "\"$_port\": \"$_pass\"" >> "$SHADOW_JSON_DIR$method.conf.tmp"
+				echo "$SHADOWSOCKS_JSON_EXT" >> "$SHADOW_JSON_DIR$method.conf.tmp"
+				sed -e "s/__FAST_OPEN__/$TCP_FAST_OPEN/; s/__METHOD__/$method/;" < "$SHADOW_JSON_DIR$method.conf.tmp" > "$SHADOW_JSON_DIR$method.conf"
+				rm "$SHADOW_JSON_DIR$method.conf.tmp"
 			}
 		} &
 	done
 	wait
-	echo $DONE
+	echo "$DONE"
 	hook post-genconf
 }

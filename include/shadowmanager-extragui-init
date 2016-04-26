@@ -2,8 +2,8 @@
 
 # usage: add-ui <name> <func> 
 
-[[ -e ./$PLUGIN_UI_CFG ]] && rm ./$PLUGIN_UI_CFG
+[[ -e "./$PLUGIN_UI_CFG" ]] && rm "./$PLUGIN_UI_CFG"
 
 function add-ui {
-	echo $1:$2 >> $PLUGIN_UI_CFG
+	echo "$1:$2" >> "$PLUGIN_UI_CFG"
 }

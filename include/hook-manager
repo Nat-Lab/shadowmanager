@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for _hook in $(ls ./hooks/)
+for _hook in ./hooks/*
 do
-	_shadowmanager_load ./hooks/$_hook
+	_shadowmanager_load "$_hook"
 done
 
 function hook {

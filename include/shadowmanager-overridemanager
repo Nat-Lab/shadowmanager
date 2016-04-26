@@ -1,25 +1,27 @@
 #!/bin/bash
 
+# shellcheck disable=SC2012 
 function enovr {
-  [[ -z $* ]] && {
+  [[ -z "$@" ]] && {
     echo "$AVAIL_OVERRIDES"
     ls ./override-available/|tr '\n' ' '
-    echo; read -p "$ENABLE_OVERRIDES" _ovrs;
+    echo; read -rp "$ENABLE_OVERRIDES" _ovrs;
   } || _ovrs="$*"
   for _ovr in $_ovrs
   do
-    [[ -e ./override-available/$_ovr ]] && cp ./override-available/$_ovr ./override/$_ovr || echo "$OVERRIDE $_ovr $NOT_EXIST"
+    [[ -e "./override-available/$_ovr" ]] && cp "./override-available/$_ovr" "./override/$_ovr" || echo "$OVERRIDE $_ovr $NOT_EXIST"
   done
 }
 
+# shellcheck disable=SC2012 
 function disovr {
-  [[ -z $* ]] && {
+  [[ -z "$@" ]] && {
     echo "$ENABLED_OVERRIDES"
     ls ./override/|tr '\n' ' '
-    echo; read -p "$REMOVE_OVERRIDES" _ovrs;
+    echo; read -rp "$REMOVE_OVERRIDES" _ovrs;
   } || _ovrs="$*"
   for _ovr in $_ovrs
   do
-    [[ -e ./override/$_ovr ]] && rm ./override/$_ovr || echo "$OVERRIDE $_ovr $NOT_EXIST"
+    [[ -e ./override/$_ovr ]] && rm "./override/$_ovr" || echo "$OVERRIDE $_ovr $NOT_EXIST"
   done
 }

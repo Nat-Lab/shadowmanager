@@ -5,28 +5,28 @@
 # usage: shadowmanager <command> [arguments ...]
 # use './shadowmanager usage' for more informations.
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 
 . ./conf/shadowmanager.conf
-. ./lang/$LANGUAGE.lang
+. "./lang/$LANGUAGE.lang"
 
 function debug {
-        [[ ! -z $DEBUG ]] && echo "[$(echo ${FUNCNAME[*]}|tr ' ' '/')] $*"
+        [[ ! -z $DEBUG ]] && echo "[$(echo "${FUNCNAME[*]}"|tr ' ' '/')] $*"
 }
 
 function _shadowmanager_load {
-        [[ -z $(cat $1 | grep "shadowmanager-ignore") ]] && . ./$1 && debug "load: loaded $1" || debug "load: ignored $1"
+        (! grep -q "shadowmanager-ignore" < "$1") && . "./$1" && debug "load: loaded $1" || debug "load: ignored $1"
 }
 
-for inc in $(ls ./include/)
+for inc in ./include/*
 do
-        _shadowmanager_load ./include/$inc
+        _shadowmanager_load "$inc"
 done
 
-for ovr in $(ls ./override/)
+for ovr in ./override/*
 do
-        _shadowmanager_load ./override/$ovr
+        _shadowmanager_load "$ovr"
 done
 
 ifroot
-[[ -z $* ]] && usage || shadowmanager_exec $*
+[[ -z "$@" ]] && usage || shadowmanager_exec "$@"

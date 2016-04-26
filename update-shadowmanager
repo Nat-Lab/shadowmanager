@@ -1,22 +1,22 @@
 #!/bin/bash
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
 [[ -e .update ]] && rm -fr .update
 mkdir .update
-cd .update 
+cd .update || exit 1
 UPDATE_URL='https://github.com/NATSOFT/shadowmanager/archive/master.zip'
 
 echo "Updating shadowmanager... "
 wget $UPDATE_URL 2> /dev/null > /dev/null 
 unzip master.zip 
 rm master.zip
-cd shadowmanager-*/
+cd shadowmanager-*/ || exit 1
 cp ../../conf/shadowmanager.conf{,.old}
 cp -R . ../../
-cd ../../
+cd ../../ || exit 1
 update_ovr="$(ls ./override/)"
 for _ovr_update in $update_ovr
 do
-	cp ./override-available/$_ovr_update ./override/
+	cp "./override-available/$_ovr_update" ./override/
 done
 echo "Update complete. Your shadowmanager.conf was moved to shadowmanager.conf.old."
 rm -fr ../../.update
