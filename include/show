@@ -6,9 +6,9 @@ function show {
 	id=0
 	[[ ! -z $1 ]] && _servers=$SHADOW_CONF.tmp || _servers=$SHADOW_CONF
 	echo "ID	(method){port,password}"
-	while IFS= read -r _server <<< "$_servers"
+	while read -r _server
 	do
 		let id++
 		echo "$id	$_server"
-	done
+	done < "$_servers"
 }
