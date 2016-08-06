@@ -25,11 +25,11 @@ function stop {
 	[[ ! -e $PIDS ]] && echo "stop: $ERR_NOT_RUNNING" && return 1
 	hook pre-stop
 	echo -n "$STOPPING_SERVERS"
-	while IFS= read -r kill < "$PIDS"
+	while IFS= read -r kill 
 	do
 		debug "kill $kill"
 		kill "$kill" > /dev/null 2> /dev/null
-	done
+	done < "$PIDS"
 	rm -f "$PIDS"
 	echo "$DONE"
 	hook post-stop
