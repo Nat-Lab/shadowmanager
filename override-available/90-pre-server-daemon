@@ -5,7 +5,7 @@ debug "overrided SHADOWSOCKS_JSON_PRE, by pre-server-daemon"
 
 SHADOWSOCKS_JSON_PRE='
 {
-    "server": "0.0.0.0",
+	"server": ["[::0]", "0.0.0.0"],
 '
 
 debug "overrided SHADOWSOCKS_JSON_EXT, by pre-server-daemon"
